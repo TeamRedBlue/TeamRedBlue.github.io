@@ -109,7 +109,6 @@ HOP RTT      ADDRESS
 ##### Kaynak kodda myapp isimli bir uygulamanın olduğu söyleniyor
 ---
 ---
----
 ```zsh
 /opt/Safe #  curl -s -O 10.10.10.147/myapp
 ```
