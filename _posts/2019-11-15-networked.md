@@ -1,5 +1,5 @@
 ---
-title: Networked
+title: "[HTB] Networked Writeup"
 layout: page
 ---
 

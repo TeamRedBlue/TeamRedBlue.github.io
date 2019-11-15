@@ -1,17 +1,4 @@
-<!DOCTYPE html>
-<html lang="en"><head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>[HTB] Networked Writeup</title><link rel="stylesheet" type="text/css" href="/assets/main-dark.css"></head>
-<body>
-    <div class="container"><header>
-  <div class="menu">
-    <ul><li><a href="/">Index of /Team Red Blue</a></li></ul>
-  </div>
-</header>
-<main>
-      <hr />
+I"ƒÌ<hr />
 <div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>âžœ  ~ nmap <span class="nt">-sS</span> <span class="nt">-sV</span> <span class="nt">-sC</span> <span class="nt">-p-</span> <span class="nt">-A</span> <span class="nt">-O</span> 10.10.10.146
 Starting Nmap 7.80 <span class="o">(</span> https://nmap.org <span class="o">)</span> at 2019-11-14 15:05 +03
 Nmap scan report <span class="k">for </span>10.10.10.146
@@ -477,11 +464,4 @@ let_me_go bash
 
 <h1 id="author-sectiontext">Author <a href=" https://twitter.com/SectionText">SectionText</a></h1>
 <hr />
-
-
-    </main><footer>
-  Bize YazÄ±n <a href="mailto://7r157@protonmail.com">Mail</a>
-</footer>
-</div>
-  </body>
-</html>
+:ET
