@@ -105,7 +105,7 @@ HOP RTT      ADDRESS
 2   66.06 ms safe.htb (10.10.10.147)
 ```
 ---
-![alt text](http://localhost:4000/assets/myapp.png)
+![alt text](https://teamredblue.github.io/assets/myapp.png)
 ##### Kaynak kodda myapp isimli bir uygulamanın olduğu söyleniyor
 ---
 ---
