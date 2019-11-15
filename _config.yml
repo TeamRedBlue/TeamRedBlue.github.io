@@ -4,10 +4,11 @@ url: "https://redblue.github.io"
 
 header_pages:
   - index.md
-  - peter.md
   - about.md
-  - contact.md
-
+  - writeup.md
+  - red.md
+  - blue.md
+  
 style: dark
 
 footer: 'Bize Yazın <a href="mailto://7r157@protonmail.com">Mail</a>'

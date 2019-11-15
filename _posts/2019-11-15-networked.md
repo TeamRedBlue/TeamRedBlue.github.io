@@ -1,6 +1,6 @@
 ---
 title: "[HTB] Networked Writeup"
-layout: page
+layout: post
 ---
 
 ---
