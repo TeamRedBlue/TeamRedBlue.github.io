@@ -1,0 +1,40 @@
+I"l<h1 id="splunk-nedir-"><span id="anchor"></span>Splunk Nedir ?</h1>
+
+<p><span id="anchor-1"></span>Splunk, çeşitli kaynaklardan log toplayabilen (sunucu,ağ cihazları,uygulamalar vb.), topladığı logları saklayan (indexleyen),saklanan loglar üzerinde arama,araştırma,analiz ve korelasyon yapmayı sağlayan SIEM (Security Information and Event Management) çözümüdür.</p>
+
+<p><span id="anchor-2"></span>Basit mantığıyla splunk,forwarder — indexer — master yapısıyla çalışmaktadır.</p>
+
+<p><span id="anchor-3"></span>Splunk belli bir mb değerine kadar free olarak kullanılabilmektedir. Bunun 500mb olduğu bilinmektedir.</p>
+
+<h1 id="kurulum"><span id="anchor-4"></span>Kurulum</h1>
+
+<p><span id="anchor-5"></span>Bu kurulum işlemleri ubuntu server üzerinde gerçekleştirilmektedir.</p>
+
+<p><span id="anchor-6"></span>Splunk sitesine üye olup giriş yapıldıktan sonra free splunk ‘a tıklanarak alttaki resimdeki sağda bulunan <strong>Splunk Free</strong>’nin altında bulunan **download **linkine tıklanılır.</p>
+
+<p>Ardından aşağıdaki gibi işletim sistemlerine göre paketler görülmektedir. Size uygun olanı seçebilirsiniz. Ubuntu server ‘a kurulum yapılacağından .deb uzantılı olan seçilmektedir.</p>
+
+<p>İndirilen dosya <strong>sudo dpkg -i dosya_adı</strong> denilerek kurulur.</p>
+
+<p><strong>Complete</strong> yazısı çıktığında kurulum gerçekleştirilmiştir. Ardından <strong>/opt/splunk/bin/splunk start</strong> denilerek başlatılır bu komut çalıştırıldığında arayüzde <strong>administrator</strong> olarak giriş yapılabilecek bir kullanıcı oluşturmanız istenir işlem bittikten sonra splunk ‘ a tarayıcı üzerinden erişim yapılabilmektedir.</p>
+
+<p><strong>http://ip_adresi:8000</strong></p>
+
+<p><span id="anchor-7"></span>ek olarak sunucunun istenilerek veya zoraki yoldan restart olması durumunda splunk server’ın otomatik olarak başlatılması için aşağıdaki komut uygulanır.</p>
+
+<p><span id="anchor-8"></span><strong>/opt/splunk/bin/splunk enable boot-start</strong></p>
+
+<p>start ederken oluşturulan kullanıcı bilgileriyle oturum açılır.</p>
+
+<p>Kurmuş olduğumuz sunucunun loglarını toplamak istendiğinden üst görselde bulunan **Add Data **bölümüne girilir.</p>
+
+<p>Burda da monitor denilerek <strong>monitor</strong> edilecek alanlar seçilir.</p>
+
+<p>Files &amp; Directories seçilir çünkü linux sistemlerde log dosyalar belirli bir path’te tutulmaktadır.Bu alandan o path belirtilir. (/var/log)</p>
+
+<p>Path belirtilditen sonra **next **denilir.</p>
+
+<p>En altta bulunan <strong>index</strong> kısmında <strong>create a new index ** diyerek logların hangi index’le tutalacağı belirlenir ve ardından next</strong> denilir.</p>
+
+<p>Ardından en son <strong>Start Searching</strong> denilerek ekleme işlemi tamamlanır ve loglar üzerinde search yapmaya başlanabilir.</p>
+:ET
