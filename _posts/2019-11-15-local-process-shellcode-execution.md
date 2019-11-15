@@ -1,5 +1,5 @@
 ---
-title: Local Process Shellcode Injection
+title: Local Process Shellcode Execution
 layout: post
 ---
 
