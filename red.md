@@ -1,5 +1,5 @@
 ---
-title: Red Team
+title: "| Red Team"
 layout: page
 ---
 
