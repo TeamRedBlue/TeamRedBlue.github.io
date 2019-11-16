@@ -285,13 +285,16 @@ Disassembly of section .plt:
 ```
 ##### ropper ile binary içerisindeki rop gadgetları dump ediyoruz
 ```zsh
-/opt/Safe # ropper -f myapp                                                                                                                                                       root@0x67616e67
+/opt/Safe # ropper -f myapp        
+```
+
+root@0x67616e67
 [INFO] Load gadgets from cache
 [LOAD] loading... 100%
 [LOAD] removing double gadgets... 100%
 
 
-
+```nasm
 Gadgets
 =======
 
@@ -395,9 +398,10 @@ Gadgets
 0x000000000040115c: nop; pop rbp; ret; 
 0x00000000004010cf: nop; ret; 
 0x0000000000401016: ret; 
+```
 
 99 gadgets found
-```
+
 ##### 0x0000000000401206: pop r13; pop r14; pop r15; ret; 
 ##### Offset: 0x401206
 ```python

