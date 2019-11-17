@@ -1,4 +1,4 @@
-I"H�<p><em>HTB Postman</em></p>
+I"9�<p><em>HTB Postman</em></p>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano /etc/hosts  <span class="o">&gt;&gt;&gt;&gt;&gt;</span>  10.10.10.160    postman.htb
 </code></pre></div></div>
@@ -515,6 +515,6 @@ a2577<span class="k">***************************</span>
 
 <p>r00t3d</p>
 
-<h1 id="author-berat-i̇şler">Author <a href=" https://twitter.com/root1x">Berat İşler</a></h1>
+<h1 id="author-root1x">Author <a href=" https://twitter.com/root1x">root1x</a></h1>
 <hr />
 :ET

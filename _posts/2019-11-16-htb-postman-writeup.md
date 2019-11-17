@@ -525,5 +525,5 @@ r00t3d
 
 
 
-# Author <a href=" https://twitter.com/root1x">Berat İşler</a> 
+# Author <a href=" https://twitter.com/root1x">root1x</a> 
 ---
