@@ -9,7 +9,7 @@ layout: post
  
  ---
  
-![alt text](https://github.com/TeamRedBlue/teamredblue.github.io/blob/master/assets/a.png)
+![alt text](https://raw.githubusercontent.com/TeamRedBlue/teamredblue.github.io/master/assets/a.png)
 
 ---
 # Preprocessing
