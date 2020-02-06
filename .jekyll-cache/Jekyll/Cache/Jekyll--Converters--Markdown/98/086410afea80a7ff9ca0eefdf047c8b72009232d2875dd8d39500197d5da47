@@ -1,0 +1,50 @@
+I"�<h1 id="şamata-yapmadan-direktman-mevuzya-dalacağım">Şamata yapmadan direktman mevuzya dalacağım.</h1>
+<hr />
+<h1 id="aşağıdaki-gibi-bir-c-kodu-hazırlayıp-derleyelim">Aşağıdaki gibi bir C kodu hazırlayıp derleyelim.</h1>
+<hr />
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">olmekten_degil_lan_acidan_korkuyom</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"BURAK YILMAZIN ANNE SEVGISI"</span><span class="p">);</span>
+  <span class="n">system</span><span class="p">(</span><span class="s">"/bin/sh"</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">sikinti</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"ANNEEEE</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">gets</span><span class="p">(</span><span class="n">sikinti</span><span class="p">);</span>
+    <span class="n">strcmp</span><span class="p">(</span><span class="n">gets</span><span class="p">,</span> <span class="n">sikinti</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sesh at ASKE <span class="k">in</span> ~/Desktop 
+<span class="nv">$ </span>gcc <span class="nt">-fno-stack-protector</span> <span class="nt">-z</span> execstack <span class="nt">-no-pie</span> rop.c <span class="nt">-o</span> rop
+sesh at ASKE <span class="k">in</span> ~/Desktop 
+<span class="nv">$ </span>file rop
+rop: ELF 64-bit LSB executable, x86-64, version 1 <span class="o">(</span>SYSV<span class="o">)</span>, dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]<span class="o">=</span>109245b75ae015328ce33fdb566b536d4b8307ad, <span class="k">for </span>GNU/Linux 3.2.0, not stripped
+</code></pre></div></div>
+<hr />
+<h1 id="şimdi-bu-kod-nabıyo-">Şimdi bu kod n’abıyo ?</h1>
+<hr />
+<h3 id="10-bytelık-değeri-sikinti-değişkeninde-tanımlayıp-burak-yılmazın-anne-sevgisini-hatırlamamız-için-ekrana-anneeee-bastırıyor-gets-ile-inputu-alıp-strcmp-ile-karşılaştırma-yapıyor-ve-return-0-ile-program-sonlanıyor-en-tepede-ölmekten-korkmayan-dostumuz-için-binsh-i-çağıran-bir-system-fonksiyonu-tanımlanıyor">10 byte’lık değeri sikinti değişkeninde tanımlayıp, burak yılmazın anne sevgisini hatırlamamız için ekrana ANNEEEE bastırıyor. Gets ile inputu alıp, strcmp ile karşılaştırma yapıyor ve return 0 ile program sonlanıyor. En tepede ölmekten korkmayan dostumuz için /bin/sh’ i çağıran bir system fonksiyonu tanımlanıyor.</h3>
+<hr />
+<h1 id="girelim-bakalım-mevzuya">Girelim bakalım, mevzuya</h1>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sesh at ASKE <span class="k">in</span> ~/Desktop 
+<span class="nv">$ </span>radare2 rop
+ <span class="nt">--</span> Microloft Visual Radare.NET 2008. Now OOXML Powered!
+</code></pre></div></div>
+<pre><code class="language-asm">[0x00401070]&gt; aaaaaa
+[x] Analyze all flags starting with sym. and entry0 (aa)
+[x] Analyze function calls (aac)
+[x] Analyze len bytes of instructions for references (aar)
+[x] Check for objc references
+[x] Check for vtables
+[x] Type matching analysis for all functions (aaft)
+[x] Propagate noreturn information
+[x] Use -AA or aaaa to perform additional experimental analysis.
+[x] Finding function preludes
+[x] Enable constraint types analysis for variables
+[0x00401070]&gt; 
+</code></pre>
+<hr />
+<h1 id="6-dan-fazla-a-basmayın-yoksa-kapınıza-polis-geliyor">6 dan fazla a basmayın yoksa kapınıza polis geliyor.</h1>
+:ET

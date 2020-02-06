@@ -1,0 +1,24 @@
+I"><h1 id="şamata-yapmadan-direktman-mevuzya-dalacağım">Şamata yapmadan direktman mevuzya dalacağım.</h1>
+<hr />
+<h1 id="aşağıdaki-gibi-bir-c-kodu-hazırlayıp-derleyelim">Aşağıdaki gibi bir C kodu hazırlayıp derleyelim.</h1>
+<hr />
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">olmekten_degil_lan_acidan_korkuyom</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"BURAK YILMAZIN ANNE SEVGISI"</span><span class="p">);</span>
+  <span class="n">system</span><span class="p">(</span><span class="s">"/bin/sh"</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">sikinti</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"ANNEEEE</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">gets</span><span class="p">(</span><span class="n">sikinti</span><span class="p">);</span>
+    <span class="n">strcmp</span><span class="p">(</span><span class="n">gets</span><span class="p">,</span> <span class="n">sikinti</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<hr />
+<p>```zsh
+sesh at ASKE in ~/Desktop 
+$ gcc -fno-stack-protector -z execstack -no-pie rop.c -o rop
+sesh at ASKE in ~/Desktop 
+$ file rop
+rop: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=109245b75ae015328ce33fdb566b536d4b8307ad, for GNU/Linux 3.2.0, not stripped</p>
+:ET

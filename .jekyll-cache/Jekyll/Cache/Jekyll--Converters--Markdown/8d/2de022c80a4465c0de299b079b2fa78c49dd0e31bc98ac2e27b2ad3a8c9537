@@ -1,8 +1,8 @@
-I"�<h1 id="c-derleme-i̇şlemi">C Derleme İşlemi</h1>
+I"7<h1 id="c-derleme-i̇şlemi">C Derleme İşlemi</h1>
 <hr />
 <h3 id="derleme-işlemine-bir-kodun-human-readable-formattan-işlemcinin-okuyabilececği-makine-diline-çevrilmesine-denir-bir-c-programının-derlenmesi-4-aşamadan-oluşur-preprocessing-compilation-assembly-ve-linking-bu-yazıda-elf-dosyaları-için-derlemenin-tüm-aşamalarını-detaylıca-açıklayacağım">Derleme işlemine; bir kodun human-readable formattan, işlemcinin okuyabilececği makine diline çevrilmesine denir. Bir C programının derlenmesi 4 aşamadan oluşur. Preprocessing, compilation, assembly ve linking. Bu yazıda ELF Dosyaları için derlemenin tüm aşamalarını detaylıca açıklayacağım.</h3>
 
 <hr />
 
-<p><img src="http://localhost:4000/a.png" alt="alt text" /></p>
+<p><img src="https://raw.githubusercontent.com/TeamRedBlue/teamredblue.github.io/master/assets/a.png" alt="alt text" /></p>
 :ET
