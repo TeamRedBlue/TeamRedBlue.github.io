@@ -46,57 +46,57 @@ tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      
 # Neyse basalım buna ekrana sürükleyip konfigüre edelim.
 ---
 
-![Processor](https://teamredblue.github.io/assets/processor.png)
+![Processor](https://teamredblue.github.io/processor.png)
 
 ---
 
-![Processor](https://teamredblue.github.io/assets/flow.png)
+![Processor](https://teamredblue.github.io/flow.png)
 
 ---
 # Üzerine çift tıklayıp Scheduling sekmesine tıklayalım.
 
-![Processor](https://teamredblue.github.io/assets/sch2.png)
+![Processor](https://teamredblue.github.io/sch2.png)
 
 ---
 # Burada run Schecule değerini 0 değil de 1 olarak ayarlayalım.
 ---
 
 # Properties sekmesini açalım.
-![Processor](https://teamredblue.github.io/assets/text.png)
+![Processor](https://teamredblue.github.io/text.png)
 
 # Custom Text alanını kafamıza göre doldurabiliriz.
 ---
 
 # Tekrar Processor simgesine tıklayarak gelen menüden PutFile elementini seçelim ve dashboarda yerleştirelim.
 
-![Processor](https://teamredblue.github.io/assets/put.png)
+![Processor](https://teamredblue.github.io/put.png)
 
 ---
 
-![Processor](https://teamredblue.github.io/assets/nifi_falan.png)
+![Processor](https://teamredblue.github.io/nifi_falan.png)
 
 # Directory i değiştirelim
 
 # PutFile elementinin Settings sekmesine giderek success ve failure alanlarını işaretleyelim. Bu alanlar herhangi bir problem oluşunca veya flow başarı ile çalışınca ne olacağıyla alakalı bize yönlendirme yapmamızı istemektedir. Ancak bizim success veya failure senaryolarında yapacak başka bir şeyimiz olmadığından dümdüz işaretleyip geçelim.
 
-![Processor](https://teamredblue.github.io/assets/failure.png)
+![Processor](https://teamredblue.github.io/failure.png)
 
 ---
 
 # Apply diyip GenerateFlowFile ile PutFile ı bağlayalım.
 # Bağlarken gelen ekrandan success i işaretliyip ok diyelim
 
-![Processor](https://teamredblue.github.io/assets/success.png)
+![Processor](https://teamredblue.github.io/success.png)
 
 ---
 
 # Şu an ekranın aşağıdaki gibi olması gerekir. 
-![Processor](https://teamredblue.github.io/assets/gogo.png)
+![Processor](https://teamredblue.github.io/gogo.png)
 
 ---
 
 # Shifte basılı tutup tüm elementleri seçip Sol menüden Start tuşuna basalım ve flowu başlatalım.
-![Processor](https://teamredblue.github.io/assets/start.png)
+![Processor](https://teamredblue.github.io/start.png)
 
 ---
 ```zsh
@@ -132,38 +132,38 @@ tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      
 # GenerateFlowFile içeriğindeki custom text i aşağıdaki gibi değşitirelim. Örnek Log;
 127.0.0.1 - peter [9/Feb/2017:10:34:12 -0700] "GET /sample-image.png HTTP/2" 200 1479
 
-![Processor](https://teamredblue.github.io/assets/customtext.png)
+![Processor](https://teamredblue.github.io/customtext.png)
 
 ---
 
 # ExtractText -> Properties altındaki Menüden + ya tıklayarak ip_bul isminde bir alan açalım ve karşısında ip yi bulacak regexi yazalım. Regex; (^\d+.\d+.\d+.\d+) anlaşılacağı üzere dümenden regex yazıyoruz arkadaşlar. 
-![Processor](https://teamredblue.github.io/assets/ipbul.png)
+![Processor](https://teamredblue.github.io/ipbul.png)
 
 ---
 
 # RouteOnAttribute diyip + ya basalım ve aşağıdaki alanı ekleyelim.
 
-![Processor](https://teamredblue.github.io/assets/route.png)
+![Processor](https://teamredblue.github.io/route.png)
 
 ---
 
 # AttributesToJSON diyip + ya basalım. Aşağıdaki alanı ekleyelim.
 
-![Processor](https://teamredblue.github.io/assets/json.png)
+![Processor](https://teamredblue.github.io/json.png)
 
 # Destination alanını da flowfile-content olarak değiştirelim.
 
-![Processor](https://teamredblue.github.io/assets/json2.png)
+![Processor](https://teamredblue.github.io/json2.png)
 
 ---
 
 # PutFile ile bir directory verip başlatalım.
-![Processor](https://teamredblue.github.io/assets/dumen.png)
+![Processor](https://teamredblue.github.io/dumen.png)
 
 
 ---
 
-![Processor](https://teamredblue.github.io/assets/asdasd.png)
+![Processor](https://teamredblue.github.io/asdasd.png)
 
 ---
 
@@ -171,7 +171,7 @@ tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      
 
 ---
 
-![Processor](https://teamredblue.github.io/assets/result.png)
+![Processor](https://teamredblue.github.io/result.png)
 
 --
 
