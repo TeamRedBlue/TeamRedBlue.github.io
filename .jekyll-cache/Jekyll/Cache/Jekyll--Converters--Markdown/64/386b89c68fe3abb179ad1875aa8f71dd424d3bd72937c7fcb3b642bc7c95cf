@@ -1,0 +1,18 @@
+I"1<h1 id="ney-bu-nifi-">Ney bu Nifi ?</h1>
+<hr />
+<h1 id="temel-anlamda-elinizdeki-kaynakları-yönetebileceğiniz-kullanımı-kolay-bir-araç-diyebiliriz-yazının-devamında-örneklerle-daha-da-açıklamaya-çalışacağım">Temel anlamda, elinizdeki kaynakları yönetebileceğiniz, kullanımı kolay bir araç diyebiliriz. Yazının devamında örneklerle daha da açıklamaya çalışacağım.</h1>
+<hr />
+<h1 id="öngereksinimler">Öngereksinimler</h1>
+<hr />
+<h1 id="kullandığınız-makinede-min-java8-yüklü-olması-gerekmekte-başka-da-bişey-lazım-değil">Kullandığınız makinede min java8 yüklü olması gerekmekte başka da bişey lazım değil</h1>
+<hr />
+<h1 id="kurulum">Kurulum</h1>
+<h1 id="buradan-bintargz-olanı-indirebilirsiniz-ben-son-sürüm-olanı-kullanıyorum"><a href="https://nifi.apache.org/download.html">Buradan</a> bin.tar.gz olanı indirebilirsiniz. Ben son sürüm olanı kullanıyorum.</h1>
+<hr />
+<h1 id="tar-ile-dosyaları-çıkardıktan-sonra-çıkarılan-dosyanın-içerisine-gidip-bin-klasörü-altında-nifi-yi-çalıştıralım">tar ile dosyaları çıkardıktan sonra çıkarılan dosyanın içerisine gidip bin klasörü altında nifi yi çalıştıralım.</h1>
+<hr />
+<p>```zsh
+~/Desktop/NIFI/nifi-1.11.1/bin 
+:: ./nifi.sh start 
+nifi.sh: JAVA_HOME not set; results may vary</p>
+:ET

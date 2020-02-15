@@ -1,0 +1,53 @@
+I"�<h1 id="ney-bu-nifi-">Ney bu Nifi ?</h1>
+<hr />
+<h1 id="temel-anlamda-elinizdeki-kaynakları-yönetebileceğiniz-kullanımı-kolay-bir-araç-diyebiliriz-yazının-devamında-örneklerle-daha-da-açıklamaya-çalışacağım">Temel anlamda, elinizdeki kaynakları yönetebileceğiniz, kullanımı kolay bir araç diyebiliriz. Yazının devamında örneklerle daha da açıklamaya çalışacağım.</h1>
+<hr />
+<h1 id="öngereksinimler">Öngereksinimler</h1>
+<hr />
+<h1 id="kullandığınız-makinede-min-java8-yüklü-olması-gerekmekte-başka-da-bişey-lazım-değil">Kullandığınız makinede min java8 yüklü olması gerekmekte başka da bişey lazım değil</h1>
+<hr />
+<h1 id="kurulum">Kurulum</h1>
+<h1 id="buradan-bintargz-olanı-indirebilirsiniz-ben-son-sürüm-olanı-kullanıyorum"><a href="https://nifi.apache.org/download.html">Buradan</a> bin.tar.gz olanı indirebilirsiniz. Ben son sürüm olanı kullanıyorum.</h1>
+<hr />
+<h1 id="tar-ile-dosyaları-çıkardıktan-sonra-çıkarılan-dosyanın-içerisine-gidip-bin-klasörü-altında-nifi-yi-çalıştıralım">tar ile dosyaları çıkardıktan sonra çıkarılan dosyanın içerisine gidip bin klasörü altında nifi yi çalıştıralım.</h1>
+<hr />
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>~/Desktop/NIFI/nifi-1.11.1/bin 
+:: ./nifi.sh start 
+nifi.sh: JAVA_HOME not <span class="nb">set</span><span class="p">;</span> results may vary
+
+Java home: 
+NiFi home: /home/sesh/Desktop/NIFI/nifi-1.11.1
+
+Bootstrap Config File: /home/sesh/Desktop/NIFI/nifi-1.11.1/conf/bootstrap.conf
+
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.apache.nifi.bootstrap.util.OSUtils <span class="o">(</span>file:/home/sesh/Desktop/NIFI/nifi-1.11.1/lib/bootstrap/nifi-bootstrap-1.11.1.jar<span class="o">)</span> to method java.lang.ProcessImpl.pid<span class="o">()</span>
+WARNING: Please consider reporting this to the maintainers of org.apache.nifi.bootstrap.util.OSUtils
+WARNING: Use <span class="nt">--illegal-access</span><span class="o">=</span>warn to <span class="nb">enable </span>warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied <span class="k">in </span>a future release
+
+~/Desktop/NIFI/nifi-1.11.1/bin 
+:: <span class="nb">sudo </span>netstat <span class="nt">-tulpan</span> | <span class="nb">grep </span>8080
+<span class="o">[</span><span class="nb">sudo</span><span class="o">]</span> password <span class="k">for </span>sesh: 
+tcp        0      0 0.0.0.0:8080            0.0.0.0:<span class="k">*</span>               LISTEN      374615/java         
+</code></pre></div></div>
+<hr />
+<h1 id="localhost8080nifi-adresi-nifi-servisinin-arayüzü-olarak-gelmektedir">localhost:8080/nifi adresi nifi servisinin arayüzü olarak gelmektedir.</h1>
+<h1 id="şimdi-bu-arayüzde-yapılabilecek-çok-şey-var-ancak-kimseyi-darlamamak-veya-rüyalarına-girmemek-için-1-2-örnek-yapıp-yazıyı-bitireceğim">Şimdi bu arayüzde yapılabilecek çok şey var ancak kimseyi darlamamak veya rüyalarına girmemek için 1-2 örnek yapıp yazıyı bitireceğim.</h1>
+<h1 id="sol-üstte-processor-iconuna-basıp-içerisinde-bir-çok-element-görebiliriz-bu-örnekte-generateflowfile-ve-putfile-elementlerini-kullanacağız">Sol üstte Processor iconuna basıp içerisinde bir çok element görebiliriz. Bu örnekte GenerateFlowFile ve PutFile elementlerini kullanacağız.</h1>
+<hr />
+<h1 id="generateflowfile-adından-da-anlaşılacağı-gibi-rastgele-data-üretir-ama-istersek-rastgele-değil-şu-datayı-üret-te-diyebiliriz">GenerateFlowFile adından da anlaşılacağı gibi rastgele data üretir. Ama istersek rastgele değil ‘ŞU’ datayı üret te diyebiliriz.</h1>
+<h1 id="neyse-basalım-buna-ekrana-sürükleyip-konfigüre-edelim">Neyse basalım buna ekrana sürükleyip konfigüre edelim.</h1>
+<hr />
+
+<p><img src="http://localhost:4000/processor.png" alt="Processor" /></p>
+
+<hr />
+
+<p><img src="http://localhost:4000/flow.png" alt="Processor" /></p>
+
+<hr />
+<h1 id="üzerine-çift-tıklayıp-scheduling-sekmesine-tıklayalım">Üzerine çift tıklayıp Scheduling sekmesine tıklayalım.</h1>
+
+<p><img src="http://localhost:4000/sch2.png" alt="Processor" /></p>
+:ET
