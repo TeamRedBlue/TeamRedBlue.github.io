@@ -58,7 +58,7 @@ tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      
 ![Processor](https://teamredblue.github.io/sch2.png)
 
 ---
-# Burada run Schecule değerini 0 değil de 1 olarak ayarlayalım.
+# Burada run Schedule değerini 0 değil de 1 olarak ayarlayalım.
 ---
 
 # Properties sekmesini açalım.
