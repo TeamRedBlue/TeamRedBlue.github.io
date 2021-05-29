@@ -543,5 +543,5 @@ root@safe:~# wc -c /root/root.txt
 root@safe:~# 
 ```
 ---
-# Author <a href=" https://twitter.com/SectionText">SectionText</a> 
+# Author <a href=" https://twitter.com/x67sv">x67sv</a> 
 ---
