@@ -899,5 +899,5 @@ Disassembly of section .fini:
 ---
 # Bir sonraki yazıda executable dosyanın memory durumları, elf ve pe dosyaları incelenecektir.
 
-# Author <a href=" https://twitter.com/SectionText">Section Text</a> 
+# Author <a href=" https://twitter.com/x67sv">x67sv</a> 
 ---
